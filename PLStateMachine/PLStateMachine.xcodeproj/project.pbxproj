@@ -1,0 +1,474 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		2A59C70E175CC22600276063 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A59C70D175CC22600276063 /* Foundation.framework */; };
+		2A59C720175CC22600276063 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A59C70D175CC22600276063 /* Foundation.framework */; };
+		2A59C723175CC22600276063 /* libPLStateMachine.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A59C70A175CC22600276063 /* libPLStateMachine.a */; };
+		2A59C745175CC2DA00276063 /* PLStateMachineStateNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A59C738175CC2DA00276063 /* PLStateMachineStateNode.m */; };
+		2A59C746175CC2DA00276063 /* PLStateMachineTransitionSignature.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A59C73A175CC2DA00276063 /* PLStateMachineTransitionSignature.m */; };
+		2A59C747175CC2DA00276063 /* PLStateMachine.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A59C73C175CC2DA00276063 /* PLStateMachine.m */; };
+		2A59C748175CC2DA00276063 /* PLStateMachineTrigger.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A59C73F175CC2DA00276063 /* PLStateMachineTrigger.m */; };
+		2A59C749175CC2DA00276063 /* PLStateMachineBlockResolver.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A59C742175CC2DA00276063 /* PLStateMachineBlockResolver.m */; };
+		2A59C74A175CC2DA00276063 /* PLStateMachineMapResolver.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A59C744175CC2DA00276063 /* PLStateMachineMapResolver.m */; };
+		2A59C753175CC2E400276063 /* PLStateMachineTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A59C750175CC2E400276063 /* PLStateMachineTests.m */; };
+		2A59C758175CC6B200276063 /* PLStateMachine.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2A59C73B175CC2DA00276063 /* PLStateMachine.h */; };
+		2A59C759175CC6B200276063 /* PLStateMachineResolver.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2A59C73D175CC2DA00276063 /* PLStateMachineResolver.h */; };
+		2A59C75A175CC6B200276063 /* PLStateMachineTrigger.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2A59C73E175CC2DA00276063 /* PLStateMachineTrigger.h */; };
+		2A59C75B175CC6B200276063 /* PLStateMachineBlockResolver.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2A59C741175CC2DA00276063 /* PLStateMachineBlockResolver.h */; };
+		2A59C75C175CC6B200276063 /* PLStateMachineMapResolver.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2A59C743175CC2DA00276063 /* PLStateMachineMapResolver.h */; };
+		ABCA9077DA3EF77E38511859 /* Kiwi.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ABCA9CD48A4E2ECC8AEDCAF1 /* Kiwi.framework */; };
+		ABCA915A8954809C098FFC42 /* OCMock-iPhone.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ABCA94D03A18EF45B57E6B6A /* OCMock-iPhone.framework */; };
+		ABCA99DA926AE2500CEE5738 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ABCA9C8465E881D9ADD46C67 /* SenTestingKit.framework */; };
+		ABCA9C266329AAFFCB3072DB /* PLStateMachineSpecs-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = ABCA93097DD24CC9A4182ECC /* PLStateMachineSpecs-Info.plist */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		2A59C721175CC22600276063 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2A59C702175CC22600276063 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2A59C709175CC22600276063;
+			remoteInfo = PLStateMachine;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		2A59C708175CC22600276063 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/${PRODUCT_NAME}";
+			dstSubfolderSpec = 16;
+			files = (
+				2A59C758175CC6B200276063 /* PLStateMachine.h in CopyFiles */,
+				2A59C759175CC6B200276063 /* PLStateMachineResolver.h in CopyFiles */,
+				2A59C75A175CC6B200276063 /* PLStateMachineTrigger.h in CopyFiles */,
+				2A59C75B175CC6B200276063 /* PLStateMachineBlockResolver.h in CopyFiles */,
+				2A59C75C175CC6B200276063 /* PLStateMachineMapResolver.h in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		2A59C70A175CC22600276063 /* libPLStateMachine.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPLStateMachine.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		2A59C70D175CC22600276063 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		2A59C71B175CC22600276063 /* PLStateMachineSpecs.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PLStateMachineSpecs.octest; sourceTree = BUILT_PRODUCTS_DIR; };
+		2A59C737175CC2DA00276063 /* PLStateMachineStateNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLStateMachineStateNode.h; sourceTree = "<group>"; };
+		2A59C738175CC2DA00276063 /* PLStateMachineStateNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLStateMachineStateNode.m; sourceTree = "<group>"; };
+		2A59C739175CC2DA00276063 /* PLStateMachineTransitionSignature.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLStateMachineTransitionSignature.h; sourceTree = "<group>"; };
+		2A59C73A175CC2DA00276063 /* PLStateMachineTransitionSignature.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLStateMachineTransitionSignature.m; sourceTree = "<group>"; };
+		2A59C73B175CC2DA00276063 /* PLStateMachine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLStateMachine.h; sourceTree = "<group>"; };
+		2A59C73C175CC2DA00276063 /* PLStateMachine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLStateMachine.m; sourceTree = "<group>"; };
+		2A59C73D175CC2DA00276063 /* PLStateMachineResolver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLStateMachineResolver.h; sourceTree = "<group>"; };
+		2A59C73E175CC2DA00276063 /* PLStateMachineTrigger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLStateMachineTrigger.h; sourceTree = "<group>"; };
+		2A59C73F175CC2DA00276063 /* PLStateMachineTrigger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLStateMachineTrigger.m; sourceTree = "<group>"; };
+		2A59C741175CC2DA00276063 /* PLStateMachineBlockResolver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLStateMachineBlockResolver.h; sourceTree = "<group>"; };
+		2A59C742175CC2DA00276063 /* PLStateMachineBlockResolver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLStateMachineBlockResolver.m; sourceTree = "<group>"; };
+		2A59C743175CC2DA00276063 /* PLStateMachineMapResolver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLStateMachineMapResolver.h; sourceTree = "<group>"; };
+		2A59C744175CC2DA00276063 /* PLStateMachineMapResolver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLStateMachineMapResolver.m; sourceTree = "<group>"; };
+		2A59C74D175CC2E400276063 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		2A59C74F175CC2E400276063 /* PLStateMachineTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLStateMachineTests.h; sourceTree = "<group>"; };
+		2A59C750175CC2E400276063 /* PLStateMachineTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLStateMachineTests.m; sourceTree = "<group>"; };
+		2A59C75D175CC88A00276063 /* PLStateMachineSpecs-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PLStateMachineSpecs-Prefix.pch"; sourceTree = "<group>"; };
+		ABCA93097DD24CC9A4182ECC /* PLStateMachineSpecs-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "PLStateMachineSpecs-Info.plist"; sourceTree = "<group>"; };
+		ABCA94D03A18EF45B57E6B6A /* OCMock-iPhone.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = "OCMock-iPhone.framework"; sourceTree = "<group>"; };
+		ABCA9C8465E881D9ADD46C67 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = ../../../../../../../../Applications/Xcode.app/Contents/Developer/Library/Frameworks/SenTestingKit.framework; sourceTree = "<group>"; };
+		ABCA9CD48A4E2ECC8AEDCAF1 /* Kiwi.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Kiwi.framework; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		2A59C707175CC22600276063 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2A59C70E175CC22600276063 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2A59C717175CC22600276063 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2A59C720175CC22600276063 /* Foundation.framework in Frameworks */,
+				2A59C723175CC22600276063 /* libPLStateMachine.a in Frameworks */,
+				ABCA9077DA3EF77E38511859 /* Kiwi.framework in Frameworks */,
+				ABCA99DA926AE2500CEE5738 /* SenTestingKit.framework in Frameworks */,
+				ABCA915A8954809C098FFC42 /* OCMock-iPhone.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		2A59C701175CC22600276063 = {
+			isa = PBXGroup;
+			children = (
+				2A59C74B175CC2E400276063 /* Specs */,
+				2A59C735175CC2DA00276063 /* Source */,
+				2A59C70C175CC22600276063 /* Frameworks */,
+				2A59C70B175CC22600276063 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		2A59C70B175CC22600276063 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				2A59C70A175CC22600276063 /* libPLStateMachine.a */,
+				2A59C71B175CC22600276063 /* PLStateMachineSpecs.octest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		2A59C70C175CC22600276063 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				2A59C70D175CC22600276063 /* Foundation.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		2A59C735175CC2DA00276063 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				2A59C736175CC2DA00276063 /* Internals */,
+				2A59C73B175CC2DA00276063 /* PLStateMachine.h */,
+				2A59C73C175CC2DA00276063 /* PLStateMachine.m */,
+				2A59C73D175CC2DA00276063 /* PLStateMachineResolver.h */,
+				2A59C73E175CC2DA00276063 /* PLStateMachineTrigger.h */,
+				2A59C73F175CC2DA00276063 /* PLStateMachineTrigger.m */,
+				2A59C740175CC2DA00276063 /* Resolvers */,
+			);
+			path = Source;
+			sourceTree = "<group>";
+		};
+		2A59C736175CC2DA00276063 /* Internals */ = {
+			isa = PBXGroup;
+			children = (
+				2A59C737175CC2DA00276063 /* PLStateMachineStateNode.h */,
+				2A59C738175CC2DA00276063 /* PLStateMachineStateNode.m */,
+				2A59C739175CC2DA00276063 /* PLStateMachineTransitionSignature.h */,
+				2A59C73A175CC2DA00276063 /* PLStateMachineTransitionSignature.m */,
+			);
+			path = Internals;
+			sourceTree = "<group>";
+		};
+		2A59C740175CC2DA00276063 /* Resolvers */ = {
+			isa = PBXGroup;
+			children = (
+				2A59C741175CC2DA00276063 /* PLStateMachineBlockResolver.h */,
+				2A59C742175CC2DA00276063 /* PLStateMachineBlockResolver.m */,
+				2A59C743175CC2DA00276063 /* PLStateMachineMapResolver.h */,
+				2A59C744175CC2DA00276063 /* PLStateMachineMapResolver.m */,
+			);
+			path = Resolvers;
+			sourceTree = "<group>";
+		};
+		2A59C74B175CC2E400276063 /* Specs */ = {
+			isa = PBXGroup;
+			children = (
+				2A59C74C175CC2E400276063 /* InfoPlist.strings */,
+				2A59C74F175CC2E400276063 /* PLStateMachineTests.h */,
+				2A59C750175CC2E400276063 /* PLStateMachineTests.m */,
+				2A59C75D175CC88A00276063 /* PLStateMachineSpecs-Prefix.pch */,
+				ABCA9E2501F84C070EE678F0 /* Frameworks */,
+				ABCA93097DD24CC9A4182ECC /* PLStateMachineSpecs-Info.plist */,
+			);
+			path = Specs;
+			sourceTree = "<group>";
+		};
+		ABCA9E2501F84C070EE678F0 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				ABCA9CD48A4E2ECC8AEDCAF1 /* Kiwi.framework */,
+				ABCA9C8465E881D9ADD46C67 /* SenTestingKit.framework */,
+				ABCA94D03A18EF45B57E6B6A /* OCMock-iPhone.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		2A59C709175CC22600276063 /* PLStateMachine */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2A59C72F175CC22600276063 /* Build configuration list for PBXNativeTarget "PLStateMachine" */;
+			buildPhases = (
+				2A59C706175CC22600276063 /* Sources */,
+				2A59C707175CC22600276063 /* Frameworks */,
+				2A59C708175CC22600276063 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = PLStateMachine;
+			productName = PLStateMachine;
+			productReference = 2A59C70A175CC22600276063 /* libPLStateMachine.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		2A59C71A175CC22600276063 /* PLStateMachineSpecs */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2A59C732175CC22600276063 /* Build configuration list for PBXNativeTarget "PLStateMachineSpecs" */;
+			buildPhases = (
+				2A59C716175CC22600276063 /* Sources */,
+				2A59C717175CC22600276063 /* Frameworks */,
+				2A59C718175CC22600276063 /* Resources */,
+				2A59C719175CC22600276063 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				2A59C722175CC22600276063 /* PBXTargetDependency */,
+			);
+			name = PLStateMachineSpecs;
+			productName = PLStateMachineTests;
+			productReference = 2A59C71B175CC22600276063 /* PLStateMachineSpecs.octest */;
+			productType = "com.apple.product-type.bundle";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		2A59C702175CC22600276063 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0460;
+				ORGANIZATIONNAME = Polidea;
+			};
+			buildConfigurationList = 2A59C705175CC22600276063 /* Build configuration list for PBXProject "PLStateMachine" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 2A59C701175CC22600276063;
+			productRefGroup = 2A59C70B175CC22600276063 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				2A59C709175CC22600276063 /* PLStateMachine */,
+				2A59C71A175CC22600276063 /* PLStateMachineSpecs */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		2A59C718175CC22600276063 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				ABCA9C266329AAFFCB3072DB /* PLStateMachineSpecs-Info.plist in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		2A59C719175CC22600276063 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		2A59C706175CC22600276063 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2A59C745175CC2DA00276063 /* PLStateMachineStateNode.m in Sources */,
+				2A59C746175CC2DA00276063 /* PLStateMachineTransitionSignature.m in Sources */,
+				2A59C747175CC2DA00276063 /* PLStateMachine.m in Sources */,
+				2A59C748175CC2DA00276063 /* PLStateMachineTrigger.m in Sources */,
+				2A59C749175CC2DA00276063 /* PLStateMachineBlockResolver.m in Sources */,
+				2A59C74A175CC2DA00276063 /* PLStateMachineMapResolver.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2A59C716175CC22600276063 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2A59C753175CC2E400276063 /* PLStateMachineTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		2A59C722175CC22600276063 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2A59C709175CC22600276063 /* PLStateMachine */;
+			targetProxy = 2A59C721175CC22600276063 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		2A59C74C175CC2E400276063 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				2A59C74D175CC2E400276063 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		2A59C72D175CC22600276063 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		2A59C72E175CC22600276063 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		2A59C730175CC22600276063 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DSTROOT = /tmp/PLStateMachine.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "";
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		2A59C731175CC22600276063 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DSTROOT = /tmp/PLStateMachine.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "";
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		2A59C733175CC22600276063 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
+					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+					"\"$(SRCROOT)/Specs\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Specs/PLStateMachineSpecs-Prefix.pch";
+				INFOPLIST_FILE = "Specs/PLStateMachineSpecs-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Debug;
+		};
+		2A59C734175CC22600276063 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
+					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+					"\"$(SRCROOT)/Specs\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Specs/PLStateMachineSpecs-Prefix.pch";
+				INFOPLIST_FILE = "Specs/PLStateMachineSpecs-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		2A59C705175CC22600276063 /* Build configuration list for PBXProject "PLStateMachine" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2A59C72D175CC22600276063 /* Debug */,
+				2A59C72E175CC22600276063 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		2A59C72F175CC22600276063 /* Build configuration list for PBXNativeTarget "PLStateMachine" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2A59C730175CC22600276063 /* Debug */,
+				2A59C731175CC22600276063 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		2A59C732175CC22600276063 /* Build configuration list for PBXNativeTarget "PLStateMachineSpecs" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2A59C733175CC22600276063 /* Debug */,
+				2A59C734175CC22600276063 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 2A59C702175CC22600276063 /* Project object */;
+}
