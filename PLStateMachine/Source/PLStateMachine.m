@@ -119,7 +119,7 @@
         if (aState == PLStateMachineStateUndefined){
             @throw [NSException exceptionWithName:@"InvalidArgumentException" reason:@"you canot register the undefined state" userInfo:nil];
         }
-        if (aName == nil || aResolver == nil){
+        if (aName == nil || aResolver == nil || aName.length == 0){
             @throw [NSException exceptionWithName:@"InvalidArgumentException" reason:@"both name and resolver must be non-nil" userInfo:nil];
         }
 
@@ -175,6 +175,10 @@
 - (void)setState:(PLStateMachineStateId)aState triggeredBy:(PLStateMachineTrigger *)trigger {
     if (aState == PLStateMachineStateUndefined){
         @throw [NSException exceptionWithName:@"InvalidArgumentException" reason:@"you canot enter the undefined state" userInfo:nil];
+    }
+
+    if(![self hasState:aState]){
+        @throw [NSException exceptionWithName:@"InvalidArgumentException" reason:@"you canot enter a state that was not registered" userInfo:nil];
     }
 
     BOOL stateChanges = aState != state;

@@ -16,12 +16,12 @@
 		2A59C748175CC2DA00276063 /* PLStateMachineTrigger.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A59C73F175CC2DA00276063 /* PLStateMachineTrigger.m */; };
 		2A59C749175CC2DA00276063 /* PLStateMachineBlockResolver.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A59C742175CC2DA00276063 /* PLStateMachineBlockResolver.m */; };
 		2A59C74A175CC2DA00276063 /* PLStateMachineMapResolver.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A59C744175CC2DA00276063 /* PLStateMachineMapResolver.m */; };
-		2A59C753175CC2E400276063 /* PLStateMachineTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A59C750175CC2E400276063 /* PLStateMachineTests.m */; };
 		2A59C758175CC6B200276063 /* PLStateMachine.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2A59C73B175CC2DA00276063 /* PLStateMachine.h */; };
 		2A59C759175CC6B200276063 /* PLStateMachineResolver.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2A59C73D175CC2DA00276063 /* PLStateMachineResolver.h */; };
 		2A59C75A175CC6B200276063 /* PLStateMachineTrigger.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2A59C73E175CC2DA00276063 /* PLStateMachineTrigger.h */; };
 		2A59C75B175CC6B200276063 /* PLStateMachineBlockResolver.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2A59C741175CC2DA00276063 /* PLStateMachineBlockResolver.h */; };
 		2A59C75C175CC6B200276063 /* PLStateMachineMapResolver.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2A59C743175CC2DA00276063 /* PLStateMachineMapResolver.h */; };
+		2A5C5544175DFAB5001AABDA /* PLStateMachineSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A5C5543175DFAB5001AABDA /* PLStateMachineSpec.m */; };
 		ABCA9077DA3EF77E38511859 /* Kiwi.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ABCA9CD48A4E2ECC8AEDCAF1 /* Kiwi.framework */; };
 		ABCA915A8954809C098FFC42 /* OCMock-iPhone.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ABCA94D03A18EF45B57E6B6A /* OCMock-iPhone.framework */; };
 		ABCA99DA926AE2500CEE5738 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ABCA9C8465E881D9ADD46C67 /* SenTestingKit.framework */; };
@@ -73,9 +73,8 @@
 		2A59C743175CC2DA00276063 /* PLStateMachineMapResolver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLStateMachineMapResolver.h; sourceTree = "<group>"; };
 		2A59C744175CC2DA00276063 /* PLStateMachineMapResolver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLStateMachineMapResolver.m; sourceTree = "<group>"; };
 		2A59C74D175CC2E400276063 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		2A59C74F175CC2E400276063 /* PLStateMachineTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLStateMachineTests.h; sourceTree = "<group>"; };
-		2A59C750175CC2E400276063 /* PLStateMachineTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLStateMachineTests.m; sourceTree = "<group>"; };
 		2A59C75D175CC88A00276063 /* PLStateMachineSpecs-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PLStateMachineSpecs-Prefix.pch"; sourceTree = "<group>"; };
+		2A5C5543175DFAB5001AABDA /* PLStateMachineSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLStateMachineSpec.m; sourceTree = "<group>"; };
 		ABCA93097DD24CC9A4182ECC /* PLStateMachineSpecs-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "PLStateMachineSpecs-Info.plist"; sourceTree = "<group>"; };
 		ABCA94D03A18EF45B57E6B6A /* OCMock-iPhone.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = "OCMock-iPhone.framework"; sourceTree = "<group>"; };
 		ABCA9C8465E881D9ADD46C67 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = ../../../../../../../../Applications/Xcode.app/Contents/Developer/Library/Frameworks/SenTestingKit.framework; sourceTree = "<group>"; };
@@ -173,11 +172,10 @@
 			isa = PBXGroup;
 			children = (
 				2A59C74C175CC2E400276063 /* InfoPlist.strings */,
-				2A59C74F175CC2E400276063 /* PLStateMachineTests.h */,
-				2A59C750175CC2E400276063 /* PLStateMachineTests.m */,
 				2A59C75D175CC88A00276063 /* PLStateMachineSpecs-Prefix.pch */,
 				ABCA9E2501F84C070EE678F0 /* Frameworks */,
 				ABCA93097DD24CC9A4182ECC /* PLStateMachineSpecs-Info.plist */,
+				2A5C5543175DFAB5001AABDA /* PLStateMachineSpec.m */,
 			);
 			path = Specs;
 			sourceTree = "<group>";
@@ -303,7 +301,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2A59C753175CC2E400276063 /* PLStateMachineTests.m in Sources */,
+				2A5C5544175DFAB5001AABDA /* PLStateMachineSpec.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -417,6 +415,10 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Specs/PLStateMachineSpecs-Prefix.pch";
 				INFOPLIST_FILE = "Specs/PLStateMachineSpecs-Info.plist";
+				OTHER_LDFLAGS = (
+					"-all_load",
+					"-ObjC",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = octest;
 			};
@@ -433,6 +435,10 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Specs/PLStateMachineSpecs-Prefix.pch";
 				INFOPLIST_FILE = "Specs/PLStateMachineSpecs-Info.plist";
+				OTHER_LDFLAGS = (
+					"-all_load",
+					"-ObjC",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = octest;
 			};
