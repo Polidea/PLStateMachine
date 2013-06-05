@@ -99,29 +99,157 @@ describe(@"PLStateMachine", ^{
     });
 
     describe(@"emitting a triger", ^{
-        __block id<PLStateMachineResolver> resolverA;
-        __block id<PLStateMachineResolver> resolverB;
-        __block id<PLStateMachineResolver> resolverC;
-        PLStateMachineStateId stateA = 1;
-        PLStateMachineStateId stateB = 2;
-        PLStateMachineStateId stateC = 3;
+        __block id resolverA;
+        __block id resolverB;
+        __block id resolverC;
+        PLStateMachineStateId stateA = 3;
+        PLStateMachineStateId stateB = 5;
+        PLStateMachineStateId stateC = 6;
+        PLStateMachineTriggerSignal signalA = 6;
 
         beforeEach(^{
             resolverA = [KWMock mockForProtocol:@protocol(PLStateMachineResolver)];
             resolverB = [KWMock mockForProtocol:@protocol(PLStateMachineResolver)];
             resolverC = [KWMock mockForProtocol:@protocol(PLStateMachineResolver)];
 
+            [resolverA stub:@selector(resolve:in:) andReturn:theValue(stateB)];
+            [resolverB stub:@selector(resolve:in:) andReturn:theValue(stateC)];
+
             [stateMachine registerStateWithId:stateA name:@"stateA" resolver:resolverA];
-            [stateMachine registerStateWithId:stateB name:@"stateB" resolver:resolverA];
-            [stateMachine registerStateWithId:stateC name:@"stateC" resolver:resolverA];
+            [stateMachine registerStateWithId:stateB name:@"stateB" resolver:resolverB];
+            [stateMachine registerStateWithId:stateC name:@"stateC" resolver:resolverC];
+
+            [stateMachine startWithState:stateA];
         });
 
         it(@"should consult the resolver for the state it's in", ^{
+            KWCaptureSpy * signalSpy = [((KWMock *)resolverA) captureArgument:@selector(resolve:in:) atIndex:0];
 
+            [[resolverA should] receive:@selector(resolve:in:)];
+            [[resolverB shouldNot] receive:@selector(resolve:in:)];
+            [[resolverC shouldNot] receive:@selector(resolve:in:)];
+
+            [stateMachine emitSignal:signalA];
+            PLStateMachineTrigger * trigger = signalSpy.argument;
+            [[theValue(trigger.signal) should] equal:theValue(signalA)];
         });
 
         it(@"should transition to the state provided by the resolver", ^{
 
+            [stateMachine emitSignal:signalA];
+            [[theValue(stateMachine.state) should] equal:theValue(stateB)];
+        });
+
+        it(@"should emit KVO messages about the transition", ^{
+            PLBlockKVOObserver * observer = [PLBlockKVOObserver new];
+            __block BOOL valid = NO;
+            [observer observeOnObject:stateMachine keypath:@"state" block:^(NSObject *object, NSDictionary *dictionary) {
+                PLStateMachineStateId newState = [[dictionary objectForKey:NSKeyValueChangeNewKey] unsignedIntegerValue];
+                PLStateMachineStateId oldState = [[dictionary objectForKey:NSKeyValueChangeOldKey] unsignedIntegerValue];
+                [[theValue(newState) should] equal:theValue(stateB)];
+                [[theValue(oldState) should] equal:theValue(stateA)];
+
+                valid = YES;
+            }];
+
+            [stateMachine emitSignal:signalA];
+
+            [[theValue(valid) should] beTrue];
+        });
+
+        it(@"should handle signals emited from inside transitions callbacks", ^{
+            [stateMachine onLeaving:stateA
+                               call:^(PLStateMachine *fsm) {
+                                   [stateMachine emitSignal:signalA];
+                               }
+                              owner:nil];
+
+            [stateMachine emitSignal:signalA];
+
+            [[theValue(stateMachine.state) should] equal:theValue(stateC)];
+        });
+    });
+
+    describe(@"transition between state", ^{
+        PLStateMachineStateId stateA = 3;
+        PLStateMachineStateId stateB = 5;
+        PLStateMachineTriggerSignal signalA = 6;
+
+        __block NSUInteger callCount;
+        __block PLStateMachineStateChangeBlock blockA;
+        __block PLStateMachineStateChangeBlock blockB;
+        __block PLStateMachineStateChangeBlock blockC;
+
+        beforeEach(^{
+            id resolverA = [KWMock mockForProtocol:@protocol(PLStateMachineResolver)];
+            [resolverA stub:@selector(resolve:in:) andReturn:theValue(stateB)];
+            [stateMachine registerStateWithId:stateA name:@"stateA" resolver:resolverA];
+
+            id resolverB = [KWMock mockForProtocol:@protocol(PLStateMachineResolver)];
+            [resolverB stub:@selector(resolve:in:) andReturn:theValue(stateA)];
+            [stateMachine registerStateWithId:stateB name:@"stateB" resolver:resolverB];
+
+            callCount = 0;
+            blockA = ^(PLStateMachine *fsm) {
+                callCount += 3;
+            };
+
+            blockB = ^(PLStateMachine *fsm) {
+                callCount += 5;
+            };
+
+            blockC = ^(PLStateMachine *fsm) {
+                callCount += 9;
+            };
+
+            [stateMachine startWithState:stateA];
+        });
+
+        it(@"should call the 'debug' callback", ^{
+            stateMachine.debugBlock = blockA;
+
+            [stateMachine emitSignal:signalA];
+
+            [[theValue(callCount) should] equal:theValue(3)];
+        });
+
+        it(@"should call the 'transition' callbacks", ^{
+            [stateMachine onTransitionCall:blockA owner:nil];
+            [stateMachine onTransitionCall:blockB owner:nil];
+            [stateMachine onTransitionCall:blockC owner:nil];
+
+            [stateMachine emitSignal:signalA];
+
+            [[theValue(callCount) should] equal:theValue(17)];
+
+        });
+
+        it(@"should call all the 'leaving' callbacks", ^{
+            [stateMachine onLeaving:stateA call:blockA owner:nil];
+            [stateMachine onLeaving:stateA call:blockB owner:nil];
+            [stateMachine onLeaving:stateB call:blockC owner:nil];
+
+            [stateMachine emitSignal:signalA];
+
+            [[theValue(callCount) should] equal:theValue(8)];
+
+        });
+
+        it(@"should call all the 'between' callbacks", ^{
+            [stateMachine emitSignal:signalA];
+
+            [[theValue(callCount) should] equal:theValue(17)];
+
+        });
+
+        it(@"should call the 'entering' callbacks", ^{
+            [stateMachine onEntering:stateA call:blockA owner:nil];
+            [stateMachine onEntering:stateA call:blockB owner:nil];
+            [stateMachine onEntering:stateB call:blockC owner:nil];
+
+            [stateMachine emitSignal:signalA];
+
+            [[theValue(callCount) should] equal:theValue(9)];
         });
     });
 
