@@ -96,7 +96,33 @@ describe(@"PLStateMachine", ^{
 
             [[theValue(valid) should] beTrue];
         });
+    });
 
+    describe(@"emitting a triger", ^{
+        __block id<PLStateMachineResolver> resolverA;
+        __block id<PLStateMachineResolver> resolverB;
+        __block id<PLStateMachineResolver> resolverC;
+        PLStateMachineStateId stateA = 1;
+        PLStateMachineStateId stateB = 2;
+        PLStateMachineStateId stateC = 3;
+
+        beforeEach(^{
+            resolverA = [KWMock mockForProtocol:@protocol(PLStateMachineResolver)];
+            resolverB = [KWMock mockForProtocol:@protocol(PLStateMachineResolver)];
+            resolverC = [KWMock mockForProtocol:@protocol(PLStateMachineResolver)];
+
+            [stateMachine registerStateWithId:stateA name:@"stateA" resolver:resolverA];
+            [stateMachine registerStateWithId:stateB name:@"stateB" resolver:resolverA];
+            [stateMachine registerStateWithId:stateC name:@"stateC" resolver:resolverA];
+        });
+
+        it(@"should consult the resolver for the state it's in", ^{
+
+        });
+
+        it(@"should transition to the state provided by the resolver", ^{
+
+        });
     });
 
 });
