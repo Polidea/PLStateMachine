@@ -1,6 +1,7 @@
 #import <Kiwi/Kiwi.h>
 #import "PLStateMachine.h"
 #import "PLStateMachineBlockResolver.h"
+#import "PLBlockKVOObserver.h"
 
 SPEC_BEGIN(PLStateMachineSpecs)
 
@@ -69,22 +70,34 @@ describe(@"PLStateMachine", ^{
             }) should] raise];
         });
 
-        it(@"should move to the start state", ^{
+        it(@"should move to the provided state", ^{
             [stateMachine registerStateWithId:startState name:@"startState" resolver:[PLStateMachineBlockResolver blockResolverWithParent:nil
                                                                                                                             resolverBlock:^PLStateMachineStateId(PLStateMachineTrigger *trigger, PLStateMachine *machine) {
                                                                                                                                 return startState;
                                                                                                                             }]];
-
             [[theValue(stateMachine.state) should] equal:theValue(PLStateMachineStateUndefined)];
+            [stateMachine startWithState:startState];
+            [[theValue(stateMachine.state) should] equal:theValue(startState)];
         });
 
-        it(@"should emit KVO messages about the transition to the start state", ^{
+        it(@"should emit KVO messages about the transition", ^{
+            [stateMachine registerStateWithId:startState name:@"startState" resolver:[PLStateMachineBlockResolver blockResolverWithParent:nil
+                                                                                                                            resolverBlock:^PLStateMachineStateId(PLStateMachineTrigger *trigger, PLStateMachine *machine) {
+                                                                                                                                return startState;
+                                                                                                                            }]];
+            PLBlockKVOObserver * observer = [PLBlockKVOObserver new];
+            __block BOOL valid = NO;
+            [observer observeOnObject:stateMachine keypath:@"state" block:^(NSObject *object, NSDictionary *dictionary) {
+                [[theValue(stateMachine.state) should] equal:theValue(startState)];
+                valid = YES;
+            }];
 
+            [stateMachine startWithState:startState];
+
+            [[theValue(valid) should] beTrue];
         });
 
     });
-
-
 
 });
 
