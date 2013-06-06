@@ -170,7 +170,7 @@ describe(@"PLStateMachine", ^{
         });
     });
 
-    describe(@"transition between state", ^{
+    describe(@"transition between states", ^{
         PLStateMachineStateId stateA = 3;
         PLStateMachineStateId stateB = 5;
         PLStateMachineTriggerSignal signalA = 6;
@@ -213,17 +213,6 @@ describe(@"PLStateMachine", ^{
             [[theValue(callCount) should] equal:theValue(3)];
         });
 
-        it(@"should call the 'transition' callbacks", ^{
-            [stateMachine onTransitionCall:blockA owner:nil];
-            [stateMachine onTransitionCall:blockB owner:nil];
-            [stateMachine onTransitionCall:blockC owner:nil];
-
-            [stateMachine emitSignal:signalA];
-
-            [[theValue(callCount) should] equal:theValue(17)];
-
-        });
-
         it(@"should call all the 'leaving' callbacks", ^{
             [stateMachine onLeaving:stateA call:blockA owner:nil];
             [stateMachine onLeaving:stateA call:blockB owner:nil];
@@ -236,9 +225,12 @@ describe(@"PLStateMachine", ^{
         });
 
         it(@"should call all the 'between' callbacks", ^{
+            [stateMachine onLeaving:stateA entering:stateB call:blockA owner:nil];
+            [stateMachine onLeaving:stateB entering:stateA call:blockB owner:nil];
+
             [stateMachine emitSignal:signalA];
 
-            [[theValue(callCount) should] equal:theValue(17)];
+            [[theValue(callCount) should] equal:theValue(3)];
 
         });
 
@@ -251,8 +243,146 @@ describe(@"PLStateMachine", ^{
 
             [[theValue(callCount) should] equal:theValue(9)];
         });
+
+        it(@"should call the 'transition' callbacks", ^{
+            [stateMachine onTransitionCall:blockA owner:nil];
+            [stateMachine onTransitionCall:blockB owner:nil];
+            [stateMachine onTransitionCall:blockC owner:nil];
+
+            [stateMachine emitSignal:signalA];
+
+            [[theValue(callCount) should] equal:theValue(17)];
+
+        });
+
+        it(@"should call all types of callback in the right order", ^{
+            __block NSUInteger order = 0;
+            [stateMachine onLeaving:stateA
+                               call:^(PLStateMachine *fsm) {
+                                   [[theValue(order++) should] equal:theValue(0)];
+                               }
+                              owner:nil];
+
+            [stateMachine onLeaving:stateA
+                           entering:stateB
+                               call:^(PLStateMachine *fsm) {
+                                   [[theValue(order++) should] equal:theValue(1)];
+                               }
+                              owner:nil];
+
+            [stateMachine onEntering:stateB
+                                call:^(PLStateMachine *fsm) {
+                                    [[theValue(order++) should] equal:theValue(2)];
+                                }
+                               owner:nil];
+
+            [stateMachine onTransitionCall:^(PLStateMachine *fsm) {
+                [[theValue(order++) should] equal:theValue(3)];
+            }
+                                     owner:nil];
+
+            [stateMachine emitSignal:signalA];
+
+        });
     });
 
+    describe(@"owned callbacks", ^{
+        PLStateMachineStateId stateA = 3;
+        PLStateMachineStateId stateB = 5;
+        PLStateMachineTriggerSignal signalA = 6;
+
+        __block NSUInteger callCount;
+        __block PLStateMachineStateChangeBlock blockA;
+        __block PLStateMachineStateChangeBlock blockB;
+        __block PLStateMachineStateChangeBlock blockC;
+
+        __block NSObject * ownerA;
+        __block NSObject * ownerB;
+
+        beforeEach(^{
+            id resolverA = [KWMock mockForProtocol:@protocol(PLStateMachineResolver)];
+            [resolverA stub:@selector(resolve:in:) andReturn:theValue(stateB)];
+            [stateMachine registerStateWithId:stateA name:@"stateA" resolver:resolverA];
+
+            id resolverB = [KWMock mockForProtocol:@protocol(PLStateMachineResolver)];
+            [resolverB stub:@selector(resolve:in:) andReturn:theValue(stateA)];
+            [stateMachine registerStateWithId:stateB name:@"stateB" resolver:resolverB];
+
+            callCount = 0;
+            blockA = ^(PLStateMachine *fsm) {
+                callCount += 3;
+            };
+
+            blockB = ^(PLStateMachine *fsm) {
+                callCount += 5;
+            };
+
+            blockC = ^(PLStateMachine *fsm) {
+                callCount += 9;
+            };
+
+            ownerA = [NSObject new];
+            ownerB = [NSObject new];
+
+            [stateMachine startWithState:stateA];
+        });
+
+
+        it(@"should of the 'leaving' type should be removable on a per owner basis", ^{
+            [stateMachine onLeaving:stateA call:blockA owner:ownerA];
+            [stateMachine onLeaving:stateA call:blockB owner:ownerB];
+            [stateMachine onLeaving:stateA call:blockC owner:ownerA];
+
+            [stateMachine removeListenersOwnedBy:ownerA];
+
+            [stateMachine emitSignal:signalA];
+
+            [[theValue(callCount) should] equal:theValue(5)];
+
+            [stateMachine emitSignal:signalA];
+
+            [[theValue(callCount) should] equal:theValue(5)];
+        });
+
+        it(@"should of the 'between' type should be removable on a per owner basis", ^{
+            [stateMachine onLeaving:stateA entering:stateB call:blockA owner:ownerB];
+            [stateMachine onLeaving:stateA entering:stateB call:blockB owner:ownerA];
+
+            [stateMachine removeListenersOwnedBy:ownerA];
+
+            [stateMachine emitSignal:signalA];
+
+            [[theValue(callCount) should] equal:theValue(3)];
+        });
+
+        it(@"should of the 'entering' type should be removable on a per owner basis", ^{
+            [stateMachine onEntering:stateA call:blockA owner:ownerA];
+            [stateMachine onEntering:stateB call:blockB owner:ownerA];
+            [stateMachine onEntering:stateB call:blockC owner:ownerB];
+
+            [stateMachine removeListenersOwnedBy:ownerB];
+
+            [stateMachine emitSignal:signalA];
+
+            [[theValue(callCount) should] equal:theValue(5)];
+
+            [stateMachine emitSignal:signalA];
+
+            [[theValue(callCount) should] equal:theValue(8)];
+        });
+
+        it(@"should of the 'transition' type should be removable on a per owner basis", ^{
+            [stateMachine onTransitionCall:blockA owner:ownerA];
+            [stateMachine onTransitionCall:blockB owner:ownerB];
+            [stateMachine onTransitionCall:blockC owner:ownerA];
+
+            [stateMachine removeListenersOwnedBy:ownerA];
+
+            [stateMachine emitSignal:signalA];
+
+            [[theValue(callCount) should] equal:theValue(5)];
+        });
+    });
 });
 
 SPEC_END
