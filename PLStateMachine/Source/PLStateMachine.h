@@ -45,6 +45,8 @@
 #import <Foundation/Foundation.h>
 #import "PLStateMachineTrigger.h"
 
+#define PLSTATE_MACHINE_VERSION 3.1
+
 @class PLStateMachine;
 @protocol PLStateMachineResolver;
 
