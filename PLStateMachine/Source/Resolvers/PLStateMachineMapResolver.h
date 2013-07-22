@@ -49,6 +49,7 @@
 @interface PLStateMachineMapResolver : NSObject<PLStateMachineResolver>
 
 + (PLStateMachineMapResolver*)mapResolverWithParent:(id <PLStateMachineResolver>)parent initBlock:(void (^)(PLStateMachineMapResolver*))initBlock;
++ (PLStateMachineMapResolver*)mapResolverWithParent:(id <PLStateMachineResolver>)parent map:(NSDictionary *)map;
 
 - (id)initWithParent:(id <PLStateMachineResolver>)parent;
 

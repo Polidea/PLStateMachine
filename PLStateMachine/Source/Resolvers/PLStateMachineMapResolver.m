@@ -66,6 +66,15 @@
     return resolver;
 }
 
++ (PLStateMachineMapResolver *)mapResolverWithParent:(id <PLStateMachineResolver>)aParent map:(NSDictionary *)aMap {
+    PLStateMachineMapResolver * resolver = [[self alloc] initWithParent:aParent];
+    for(NSNumber * trigger in aMap.allKeys){
+        NSNumber * state = [aMap objectForKey:trigger];
+        [resolver on:trigger.unsignedIntegerValue goTo:state.unsignedIntegerValue];
+    }
+    return resolver;
+}
+
 
 - (id)initWithParent:(id <PLStateMachineResolver>)aParent {
     self = [super init];
