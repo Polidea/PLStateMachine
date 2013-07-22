@@ -3,7 +3,7 @@
 #import "PLStateMachineBlockResolver.h"
 #import "PLBlockKVOObserver.h"
 
-SPEC_BEGIN(PLStateMachineSpecs)
+SPEC_BEGIN(PLStateMachineSpec)
 
 describe(@"PLStateMachine", ^{
     __block PLStateMachine * stateMachine;

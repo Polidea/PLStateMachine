@@ -25,6 +25,8 @@
 		ABCA9077DA3EF77E38511859 /* Kiwi.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ABCA9CD48A4E2ECC8AEDCAF1 /* Kiwi.framework */; };
 		ABCA915A8954809C098FFC42 /* OCMock-iPhone.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ABCA94D03A18EF45B57E6B6A /* OCMock-iPhone.framework */; };
 		ABCA99DA926AE2500CEE5738 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ABCA9C8465E881D9ADD46C67 /* SenTestingKit.framework */; };
+		ABCA9A17E3D3006C37A78897 /* PLStateMachineBlockResolverSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = ABCA9FB13293C4462D43A974 /* PLStateMachineBlockResolverSpec.m */; };
+		ABCA9AFDFC7299880AE90C61 /* PLStateMachineMapResolverSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = ABCA96F4E6AB42425D82CF9C /* PLStateMachineMapResolverSpec.m */; };
 		ABCA9B292E54B577CD26B1E7 /* PLBlockKVOObserver.m in Sources */ = {isa = PBXBuildFile; fileRef = ABCA9C56DA516F59AD838949 /* PLBlockKVOObserver.m */; };
 		ABCA9C266329AAFFCB3072DB /* PLStateMachineSpecs-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = ABCA93097DD24CC9A4182ECC /* PLStateMachineSpecs-Info.plist */; };
 /* End PBXBuildFile section */
@@ -79,9 +81,11 @@
 		ABCA927077FC5E435B5C87D0 /* PLBlockKVOObserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLBlockKVOObserver.h; sourceTree = "<group>"; };
 		ABCA93097DD24CC9A4182ECC /* PLStateMachineSpecs-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "PLStateMachineSpecs-Info.plist"; sourceTree = "<group>"; };
 		ABCA94D03A18EF45B57E6B6A /* OCMock-iPhone.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = "OCMock-iPhone.framework"; sourceTree = "<group>"; };
+		ABCA96F4E6AB42425D82CF9C /* PLStateMachineMapResolverSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLStateMachineMapResolverSpec.m; sourceTree = "<group>"; };
 		ABCA9C56DA516F59AD838949 /* PLBlockKVOObserver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLBlockKVOObserver.m; sourceTree = "<group>"; };
 		ABCA9C8465E881D9ADD46C67 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = ../../../../../../../../Applications/Xcode.app/Contents/Developer/Library/Frameworks/SenTestingKit.framework; sourceTree = "<group>"; };
 		ABCA9CD48A4E2ECC8AEDCAF1 /* Kiwi.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Kiwi.framework; sourceTree = "<group>"; };
+		ABCA9FB13293C4462D43A974 /* PLStateMachineBlockResolverSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLStateMachineBlockResolverSpec.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -181,6 +185,8 @@
 				2A5C5543175DFAB5001AABDA /* PLStateMachineSpec.m */,
 				ABCA9C56DA516F59AD838949 /* PLBlockKVOObserver.m */,
 				ABCA927077FC5E435B5C87D0 /* PLBlockKVOObserver.h */,
+				ABCA96F4E6AB42425D82CF9C /* PLStateMachineMapResolverSpec.m */,
+				ABCA9FB13293C4462D43A974 /* PLStateMachineBlockResolverSpec.m */,
 			);
 			path = Specs;
 			sourceTree = "<group>";
@@ -308,6 +314,8 @@
 			files = (
 				2A5C5544175DFAB5001AABDA /* PLStateMachineSpec.m in Sources */,
 				ABCA9B292E54B577CD26B1E7 /* PLBlockKVOObserver.m in Sources */,
+				ABCA9AFDFC7299880AE90C61 /* PLStateMachineMapResolverSpec.m in Sources */,
+				ABCA9A17E3D3006C37A78897 /* PLStateMachineBlockResolverSpec.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
