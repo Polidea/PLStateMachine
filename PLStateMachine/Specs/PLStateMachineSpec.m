@@ -21,10 +21,9 @@ describe(@"PLStateMachine", ^{
         __block id<PLStateMachineResolver> resolver;
 
         beforeEach(^{
-            resolver = [PLStateMachineBlockResolver blockResolverWithParent:nil
-                                                              resolverBlock:^PLStateMachineStateId(PLStateMachineTrigger *trigger, PLStateMachine *machine) {
-                                                                  return placeholderState;
-                                                              }];
+            resolver = blockResolver(^PLStateMachineStateId(PLStateMachineTrigger *trigger, PLStateMachine *machine) {
+                return placeholderState;
+            });
         });
 
         it(@"should throw an exception if the undefined state id is provided", ^{
@@ -71,20 +70,22 @@ describe(@"PLStateMachine", ^{
         });
 
         it(@"should move to the provided state", ^{
-            [stateMachine registerStateWithId:startState name:@"startState" resolver:[PLStateMachineBlockResolver blockResolverWithParent:nil
-                                                                                                                            resolverBlock:^PLStateMachineStateId(PLStateMachineTrigger *trigger, PLStateMachine *machine) {
-                                                                                                                                return startState;
-                                                                                                                            }]];
+            [stateMachine registerStateWithId:startState
+                                         name:@"startState"
+                                     resolver:blockResolver(^(PLStateMachineTrigger *trigger, PLStateMachine *machine) {
+                                         return startState;
+                                     })];
             [[theValue(stateMachine.state) should] equal:theValue(PLStateMachineStateUndefined)];
             [stateMachine startWithState:startState];
             [[theValue(stateMachine.state) should] equal:theValue(startState)];
         });
 
         it(@"should emit KVO messages about the transition", ^{
-            [stateMachine registerStateWithId:startState name:@"startState" resolver:[PLStateMachineBlockResolver blockResolverWithParent:nil
-                                                                                                                            resolverBlock:^PLStateMachineStateId(PLStateMachineTrigger *trigger, PLStateMachine *machine) {
-                                                                                                                                return startState;
-                                                                                                                            }]];
+            [stateMachine registerStateWithId:startState
+                                         name:@"startState"
+                                     resolver:blockResolver(^(PLStateMachineTrigger *trigger, PLStateMachine *machine) {
+                                         return startState;
+                                     })];
             PLBlockKVOObserver * observer = [PLBlockKVOObserver new];
             __block BOOL valid = NO;
             [observer observeOnObject:stateMachine keypath:@"state" block:^(NSObject *object, NSDictionary *dictionary) {

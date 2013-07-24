@@ -57,11 +57,6 @@
 @synthesize parent = parent;
 @synthesize resolverBlock = resolverBlock;
 
-+ (PLStateMachineBlockResolver*)blockResolverWithParent:(id <PLStateMachineResolver>)aParent resolverBlock:(PLStateMachineBlockResolverBlock)aResolverBlock {
-    PLStateMachineBlockResolver * resolver = [[self alloc] initWithParent:aParent resolverBlock:aResolverBlock];
-    return resolver;
-}
-
 - (id)initWithParent:(id <PLStateMachineResolver>)aParent resolverBlock:(PLStateMachineBlockResolverBlock)aResolverBlock {
     self = [super init];
     if (self) {
@@ -83,5 +78,12 @@
     }
 }
 
-
 @end
+
+PLStateMachineBlockResolver *blockResolver(PLStateMachineBlockResolverBlock block) {
+    return childBlockResolver(nil, block);
+}
+
+PLStateMachineBlockResolver *childBlockResolver(id <PLStateMachineResolver> parent, PLStateMachineBlockResolverBlock block) {
+    return [[PLStateMachineBlockResolver alloc] initWithParent:parent resolverBlock:block];
+}

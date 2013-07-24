@@ -49,8 +49,9 @@ typedef PLStateMachineStateId (^PLStateMachineBlockResolverBlock)(PLStateMachine
 
 @interface PLStateMachineBlockResolver : NSObject<PLStateMachineResolver>
 
-+ (PLStateMachineBlockResolver*)blockResolverWithParent:(id <PLStateMachineResolver>)parent resolverBlock:(PLStateMachineBlockResolverBlock)resolverBlock;
-
 - (id)initWithParent:(id <PLStateMachineResolver>)parent resolverBlock:(PLStateMachineBlockResolverBlock)resolverBlock;
 
 @end
+
+PLStateMachineBlockResolver * blockResolver(PLStateMachineBlockResolverBlock block);
+PLStateMachineBlockResolver * childBlockResolver(id<PLStateMachineResolver> parent, PLStateMachineBlockResolverBlock block);

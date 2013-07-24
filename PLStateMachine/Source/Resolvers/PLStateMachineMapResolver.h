@@ -45,14 +45,14 @@
 #import <Foundation/Foundation.h>
 #import "PLStateMachineResolver.h"
 
-
 @interface PLStateMachineMapResolver : NSObject<PLStateMachineResolver>
 
-+ (PLStateMachineMapResolver*)mapResolverWithParent:(id <PLStateMachineResolver>)parent initBlock:(void (^)(PLStateMachineMapResolver*))initBlock;
-+ (PLStateMachineMapResolver*)mapResolverWithParent:(id <PLStateMachineResolver>)parent map:(NSDictionary *)map;
-
-- (id)initWithParent:(id <PLStateMachineResolver>)parent;
+- (id)initWithParent:(id <PLStateMachineResolver>)parent map:(NSDictionary *)map;
 
 -(void)on:(PLStateMachineTriggerSignal)on goTo:(PLStateMachineStateId)state;
+-(void)on:(PLStateMachineTriggerSignal)on consult:(id<PLStateMachineResolver>)consultant;
 
 @end
+
+PLStateMachineMapResolver *mapResolver(NSDictionary *map);
+PLStateMachineMapResolver *childMapResolver(id <PLStateMachineResolver> parent, NSDictionary *map);

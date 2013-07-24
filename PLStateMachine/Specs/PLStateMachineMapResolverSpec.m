@@ -1,5 +1,6 @@
 #import <Kiwi/Kiwi.h>
 #import "PLStateMachineMapResolver.h"
+#import "PLStateMachineBlockResolver.h"
 
 SPEC_BEGIN(PLStateMachineMapResolverSpec)
 
@@ -17,8 +18,8 @@ describe(@"PLStateMachineMapResolver", ^{
         fsm = [[PLStateMachine alloc] init];
     });
 
-    it(@"should use the proper configuration", ^{
-        PLStateMachineMapResolver * resolver = [[PLStateMachineMapResolver alloc] initWithParent:nil];
+    it(@"should use the proper trigger->state configuration", ^{
+        PLStateMachineMapResolver * resolver = [[PLStateMachineMapResolver alloc] initWithParent:nil map:nil];
 
         [resolver on:triggerSignal1 goTo:stateId1];
         [resolver on:triggerSignal2 goTo:stateId2];
@@ -26,32 +27,67 @@ describe(@"PLStateMachineMapResolver", ^{
         [[theValue([resolver resolve:[PLStateMachineTrigger triggerWithSignal:triggerSignal2] in:fsm]) should] equal:theValue(stateId2)];
     });
 
-    describe(@"fast constructor should take the configuration", ^{
-        it(@"from the initBlock", ^{
-            PLStateMachineMapResolver *resolver = [PLStateMachineMapResolver mapResolverWithParent:nil
-                                                                                         initBlock:^(PLStateMachineMapResolver *locResolver) {
-                                                                                             [locResolver on:triggerSignal1 goTo:stateId1];
-                                                                                             [locResolver on:triggerSignal2 goTo:stateId2];
-                                                                                         }];
+    it(@"should use the proper trigger->block->state configuration", ^{
+        PLStateMachineMapResolver * resolver = [[PLStateMachineMapResolver alloc] initWithParent:nil map:nil];
 
-            [[theValue([resolver resolve:[PLStateMachineTrigger triggerWithSignal:triggerSignal2] in:fsm]) should] equal:theValue(stateId2)];
-        });
+        __block NSObject * a = [NSObject new];
+        __block NSUInteger callCount = 0;
 
-        it(@"from a map", ^{
-            PLStateMachineMapResolver *resolver = [PLStateMachineMapResolver mapResolverWithParent:nil
-                                                                                               map:@{
-                                                                                                       @(triggerSignal1) : @(stateId1),
-                                                                                                       @(triggerSignal2) : @(stateId2)
-                                                                                               }];
+        [resolver on:triggerSignal1
+             consult:blockResolver(^(PLStateMachineTrigger *trigger, PLStateMachine *fsm) {
+                 ++callCount;
+                 if (trigger.object == a) {
+                     return stateId1;
+                 } else {
+                     return stateId2;
+                 }
+             })];
 
-            [[theValue([resolver resolve:[PLStateMachineTrigger triggerWithSignal:triggerSignal1] in:fsm]) should] equal:theValue(stateId1)];
+        [resolver on:triggerSignal2
+             consult:blockResolver(^(PLStateMachineTrigger *trigger, PLStateMachine *fsm) {
+                 ++callCount;
+                 if (trigger.object == a) {
+                     return stateId2;
+                 } else {
+                     return stateId1;
+                 }
+             })];
+
+        [[theValue([resolver resolve:[PLStateMachineTrigger triggerWithSignal:triggerSignal1 object:nil] in:fsm]) should] equal:theValue(stateId2)];
+        [[theValue([resolver resolve:[PLStateMachineTrigger triggerWithSignal:triggerSignal1 object:a] in:fsm]) should] equal:theValue(stateId1)];
+        [[theValue([resolver resolve:[PLStateMachineTrigger triggerWithSignal:triggerSignal2 object:nil] in:fsm]) should] equal:theValue(stateId1)];
+        [[theValue([resolver resolve:[PLStateMachineTrigger triggerWithSignal:triggerSignal2 object:a] in:fsm]) should] equal:theValue(stateId2)];
+        [[theValue(callCount) should] equal:theValue(4)];
+    });
+
+    describe(@"fast constructor", ^{
+        describe(@"with a map", ^{
+            it(@"should apply the provided configuration", ^{
+                PLStateMachineMapResolver *resolver = mapResolver(@{
+                        @(triggerSignal1) : @(stateId1),
+                        @(triggerSignal2) : @(stateId2)
+            });
+
+                [[theValue([resolver resolve:[PLStateMachineTrigger triggerWithSignal:triggerSignal1] in:fsm]) should] equal:theValue(stateId1)];
+            });
+
+            it(@"should rise an exception if the map has non NSNumber keys/objects", ^{
+                [[theBlock(^{
+                    PLStateMachineMapResolver *resolver = mapResolver(@{
+                            @(triggerSignal1) : @"abc",
+                            @"xyz" : @(stateId2)
+                    });
+                }) should] raiseWithName:@"InvalidArgumentException"];
+
+            });
+
         });
     });
 
     it(@"should not consult the parent resolver if the resolverblock succeeds", ^{
         id parentResolver = [KWMock mockForProtocol:@protocol(PLStateMachineResolver)];
 
-        PLStateMachineMapResolver * resolver = [[PLStateMachineMapResolver alloc] initWithParent:parentResolver];
+        PLStateMachineMapResolver * resolver = [[PLStateMachineMapResolver alloc] initWithParent:parentResolver map:nil];
 
         [resolver on:triggerSignal1 goTo:stateId1];
 
@@ -63,7 +99,7 @@ describe(@"PLStateMachineMapResolver", ^{
         id parentResolver = [KWMock mockForProtocol:@protocol(PLStateMachineResolver)];
         [parentResolver stub:@selector(resolve:in:) andReturn:theValue(stateId1)];
 
-        PLStateMachineMapResolver * resolver = [[PLStateMachineMapResolver alloc] initWithParent:parentResolver];
+        PLStateMachineMapResolver * resolver = [[PLStateMachineMapResolver alloc] initWithParent:parentResolver map:nil];
 
         [[parentResolver should] receive:@selector(resolve:in:)];
         [[theValue([resolver resolve:[PLStateMachineTrigger triggerWithSignal:triggerSignal2] in:fsm]) should] equal:theValue(stateId1)];
