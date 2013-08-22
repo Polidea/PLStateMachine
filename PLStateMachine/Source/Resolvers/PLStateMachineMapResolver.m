@@ -46,15 +46,15 @@
 #import "PLStateMachineTrigger.h"
 
 
-@interface PLStateMachineMapResolver()
+@interface PLStateMachineMapResolver ()
 
-@property (nonatomic, retain, readonly) id<PLStateMachineResolver> parent;
+@property(nonatomic, retain, readonly) id <PLStateMachineResolver> parent;
 
 @end
 
 @implementation PLStateMachineMapResolver {
 @private
-    NSMutableDictionary * map;
+    NSMutableDictionary *map;
 }
 @synthesize parent = parent;
 
@@ -65,14 +65,21 @@
 
         map = [[NSMutableDictionary alloc] init];
 
-        for(NSNumber * trigger in aMap.allKeys){
-            NSNumber * state = [aMap objectForKey:trigger];
+        for (NSNumber *trigger in aMap.allKeys) {
+            NSNumber *value = [aMap objectForKey:trigger];
 
-            if(![trigger isKindOfClass:[NSNumber class]] || ![state isKindOfClass:[NSNumber class]]){
-                @throw [NSException exceptionWithName:@"InvalidArgumentException" reason:@"both the keys and values must be of the NSNumber type" userInfo:nil];
+            if (![trigger isKindOfClass:[NSNumber class]]) {
+                @throw [NSException exceptionWithName:@"InvalidArgumentException" reason:@"the keys must be of the NSNumber type" userInfo:nil];
             }
 
-            [self on:trigger.unsignedIntegerValue goTo:state.unsignedIntegerValue];
+            if ([value isKindOfClass:[NSNumber class]]) {
+                [self on:trigger.unsignedIntegerValue goTo:value.unsignedIntegerValue];
+            } else if ([value conformsToProtocol:@protocol(PLStateMachineResolver)]) {
+                id <PLStateMachineResolver> consultant = (id <PLStateMachineResolver>) value;
+                [self on:trigger.unsignedIntegerValue consult:consultant];
+            } else {
+                @throw [NSException exceptionWithName:@"InvalidArgumentException" reason:@"the value must be either a NSNumber or a PLStateMachineResolver" userInfo:nil];
+            }
         }
     }
 
@@ -83,26 +90,26 @@
     [map setObject:[NSNumber numberWithUnsignedInteger:state] forKey:[NSNumber numberWithUnsignedInteger:on]];
 }
 
-- (void)on:(PLStateMachineTriggerSignal)on consult:(id<PLStateMachineResolver>)consultant {
+- (void)on:(PLStateMachineTriggerSignal)on consult:(id <PLStateMachineResolver>)consultant {
     [map setObject:consultant forKey:[NSNumber numberWithUnsignedInteger:on]];
 }
 
 - (PLStateMachineStateId)resolve:(PLStateMachineTrigger *)trigger in:(PLStateMachine *)sm {
-    NSNumber * key = [NSNumber numberWithUnsignedInteger:trigger.signal];
-    NSObject * value = [map objectForKey:key];
+    NSNumber *key = [NSNumber numberWithUnsignedInteger:trigger.signal];
+    NSObject *value = [map objectForKey:key];
 
     PLStateMachineStateId nextState = PLStateMachineStateUndefined;
 
-    if(value != nil){
-        if ([value isKindOfClass:[NSNumber class]]){
-            nextState = [(NSNumber *)value unsignedIntegerValue];
-        } else if ([value conformsToProtocol:@protocol(PLStateMachineResolver)]){
-            id<PLStateMachineResolver> consultant = (id<PLStateMachineResolver>) value;
+    if (value != nil) {
+        if ([value isKindOfClass:[NSNumber class]]) {
+            nextState = [(NSNumber *) value unsignedIntegerValue];
+        } else if ([value conformsToProtocol:@protocol(PLStateMachineResolver)]) {
+            id <PLStateMachineResolver> consultant = (id <PLStateMachineResolver>) value;
             nextState = [consultant resolve:trigger in:sm];
         }
     }
 
-    if (parent != nil){
+    if (nextState == PLStateMachineStateUndefined && parent!=nil) {
         return [parent resolve:trigger in:sm];
     }
 
