@@ -285,6 +285,17 @@ describe(@"PLStateMachine", ^{
             [stateMachine emitSignal:signalA];
 
         });
+
+        it(@"should have all the state/prevState/triggeredBy properties properly set at time of callbacks invocation", ^{
+            [stateMachine onTransitionCall:^(PLStateMachine *fsm) {
+                [[theValue(fsm.state) should] equal:theValue(stateB)];
+                [[theValue(fsm.prevState) should] equal:theValue(stateA)];
+                [[theValue(fsm.triggeredBy.signal) should] equal:theValue(signalA)];
+            }
+                                     owner:nil];
+
+            [stateMachine emitSignal:signalA];
+        });
     });
 
     describe(@"owned callbacks", ^{

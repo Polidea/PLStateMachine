@@ -212,6 +212,7 @@ NSString *const kStateMachineCallbackListenerOwnerKey = @"owner";
         [self willChangeValueForKey:@"state"];
         prevState = state;
         state = aState;
+        triggeredBy = trigger;
         [self didChangeValueForKey:@"state"];
         [self didChangeValueForKey:@"prevState"];
     }
