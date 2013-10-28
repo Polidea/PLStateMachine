@@ -171,14 +171,14 @@ NSString *const kStateMachineCallbackListenerOwnerKey = @"owner";
 }
 
 - (void)removeListenersOwnedBy:(id <NSObject>)owner {
-    if(owner == nil){
+    if (owner == nil) {
         return;
     }
 
-    for(PLStateMachineTransitionSignature * signature in [transitionListeners allKeys]){
-        NSMutableArray * listenersForSignature = [transitionListeners objectForKey:signature];
+    for (PLStateMachineTransitionSignature *signature in [transitionListeners allKeys]) {
+        NSMutableArray *listenersForSignature = [transitionListeners objectForKey:signature];
         [listenersForSignature filterUsingPredicate:[NSPredicate predicateWithFormat:@"%K != %@", kStateMachineCallbackListenerOwnerKey, owner]];
-        if(listenersForSignature.count == 0){
+        if (listenersForSignature.count == 0) {
             [transitionListeners removeObjectForKey:signature];
         }
     }
@@ -198,6 +198,7 @@ NSString *const kStateMachineCallbackListenerOwnerKey = @"owner";
     }
 
     BOOL stateChanges = aState != state;
+    BOOL prevStateChanges = prevState != state;
     BOOL triggerChanges = trigger != triggeredBy;
 
     if (!stateChanges && !triggerChanges) {
@@ -207,15 +208,15 @@ NSString *const kStateMachineCallbackListenerOwnerKey = @"owner";
     if (triggerChanges) {
         [self willChangeValueForKey:@"triggeredBy"];
     }
-    if (stateChanges) {
-        [self willChangeValueForKey:@"prevState"];
-        [self willChangeValueForKey:@"state"];
-        prevState = state;
-        state = aState;
-        triggeredBy = trigger;
-        [self didChangeValueForKey:@"state"];
-        [self didChangeValueForKey:@"prevState"];
-    }
+
+    [self willChangeValueForKey:@"prevState"];
+    [self willChangeValueForKey:@"state"];
+    prevState = state;
+    state = aState;
+    triggeredBy = trigger;
+    [self didChangeValueForKey:@"state"];
+    [self didChangeValueForKey:@"prevState"];
+
     if (triggerChanges) {
         [self didChangeValueForKey:@"triggeredBy"];
     }
@@ -251,17 +252,17 @@ NSString *const kStateMachineCallbackListenerOwnerKey = @"owner";
 - (void)notifyStateChange {
     if (prevState != PLStateMachineStateUndefined) {
         PLStateMachineTransitionSignature *leavingSignature = [PLStateMachineTransitionSignature signatureForLeaving:prevState];
-        for (NSDictionary * listeners in [transitionListeners objectForKey:leavingSignature]) {
+        for (NSDictionary *listeners in [transitionListeners objectForKey:leavingSignature]) {
             PLStateMachineStateChangeBlock block = [listeners objectForKey:kStateMachineCallbackListenerBlockKey];
-            if(block){
+            if (block) {
                 block(self);
             }
         }
 
         PLStateMachineTransitionSignature *transitionSignature = [PLStateMachineTransitionSignature signatureForLeaving:prevState forEntering:state];
-        for (NSDictionary * listeners in [transitionListeners objectForKey:transitionSignature]) {
+        for (NSDictionary *listeners in [transitionListeners objectForKey:transitionSignature]) {
             PLStateMachineStateChangeBlock block = [listeners objectForKey:kStateMachineCallbackListenerBlockKey];
-            if(block){
+            if (block) {
                 block(self);
             }
         }
@@ -269,16 +270,16 @@ NSString *const kStateMachineCallbackListenerOwnerKey = @"owner";
 
 
     PLStateMachineTransitionSignature *enteringSignature = [PLStateMachineTransitionSignature signatureForEntering:state];
-    for (NSDictionary * listeners in [transitionListeners objectForKey:enteringSignature]) {
+    for (NSDictionary *listeners in [transitionListeners objectForKey:enteringSignature]) {
         PLStateMachineStateChangeBlock block = [listeners objectForKey:kStateMachineCallbackListenerBlockKey];
-        if(block){
+        if (block) {
             block(self);
         }
     }
 
-    for (NSDictionary * listeners in [transitionListeners objectForKey:[PLStateMachineTransitionSignature zeroSignature]]) {
+    for (NSDictionary *listeners in [transitionListeners objectForKey:[PLStateMachineTransitionSignature zeroSignature]]) {
         PLStateMachineStateChangeBlock block = [listeners objectForKey:kStateMachineCallbackListenerBlockKey];
-        if(block){
+        if (block) {
             block(self);
         }
     }
