@@ -153,8 +153,6 @@ NSString *const kStateMachineCallbackListenerOwnerKey = @"owner";
 }
 
 - (void)onLeaving:(PLStateMachineStateId)aPrevState entering:(PLStateMachineStateId)aNewState call:(PLStateMachineStateChangeBlock)block owner:(id <NSObject>)owner {
-    //TODO: implement owners
-
     PLStateMachineTransitionSignature *signature = [PLStateMachineTransitionSignature signatureForLeaving:aPrevState forEntering:aNewState];
 
     NSMutableArray *listenersForSignature = [transitionListeners objectForKey:signature];
@@ -166,7 +164,7 @@ NSString *const kStateMachineCallbackListenerOwnerKey = @"owner";
     if (owner == nil) {
         [listenersForSignature addObject:@{kStateMachineCallbackListenerBlockKey : [block copy]}];
     } else {
-        [listenersForSignature addObject:@{kStateMachineCallbackListenerBlockKey : [block copy], kStateMachineCallbackListenerOwnerKey : owner}];
+        [listenersForSignature addObject:@{kStateMachineCallbackListenerBlockKey : [block copy], kStateMachineCallbackListenerOwnerKey : [NSValue valueWithNonretainedObject:owner]}];
     }
 }
 
@@ -175,9 +173,10 @@ NSString *const kStateMachineCallbackListenerOwnerKey = @"owner";
         return;
     }
 
+    NSValue * nonRetainedOwner = [NSValue valueWithNonretainedObject:owner];
     for (PLStateMachineTransitionSignature *signature in [transitionListeners allKeys]) {
         NSMutableArray *listenersForSignature = [transitionListeners objectForKey:signature];
-        [listenersForSignature filterUsingPredicate:[NSPredicate predicateWithFormat:@"%K != %@", kStateMachineCallbackListenerOwnerKey, owner]];
+        [listenersForSignature filterUsingPredicate:[NSPredicate predicateWithFormat:@"%K != %@", kStateMachineCallbackListenerOwnerKey, nonRetainedOwner]];
         if (listenersForSignature.count == 0) {
             [transitionListeners removeObjectForKey:signature];
         }
@@ -198,11 +197,10 @@ NSString *const kStateMachineCallbackListenerOwnerKey = @"owner";
     }
 
     BOOL stateChanges = aState != state;
-    BOOL prevStateChanges = prevState != state;
     BOOL triggerChanges = trigger != triggeredBy;
 
     if (!stateChanges && !triggerChanges) {
-        @throw [NSException exceptionWithName:@"InvalidArgumentException" reason:@"at least one state or trigger needs to change" userInfo:nil];
+        @throw [NSException exceptionWithName:@"InvalidArgumentException" reason:@"at least one of state or trigger needs to change" userInfo:nil];
     }
 
     if (triggerChanges) {
