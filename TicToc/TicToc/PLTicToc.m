@@ -127,7 +127,7 @@ action callbacks is presented. As are both map and block resolvers.
         [_fsm onLeaving:PLTicTocStateClick
                    call:^(PLStateMachine *fsm) {
                        NSLog(@"onLeaving");
-                       [NSObject cancelPreviousPerformRequestsWithTarget:self
+                       [NSObject cancelPreviousPerformRequestsWithTarget:weakSelf
                                                                 selector:@selector(timeout)
                                                                   object:nil];
                    }
