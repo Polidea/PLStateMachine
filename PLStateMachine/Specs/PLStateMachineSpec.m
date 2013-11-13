@@ -106,7 +106,7 @@ describe(@"PLStateMachine", ^{
         PLStateMachineStateId stateA = 3;
         PLStateMachineStateId stateB = 5;
         PLStateMachineStateId stateC = 6;
-        PLStateMachineTriggerSignal signalA = 6;
+        PLStateMachineTriggerId signalA = 6;
 
         beforeEach(^{
             resolverA = [KWMock mockForProtocol:@protocol(PLStateMachineResolver)];
@@ -130,14 +130,14 @@ describe(@"PLStateMachine", ^{
             [[resolverB shouldNot] receive:@selector(resolve:in:)];
             [[resolverC shouldNot] receive:@selector(resolve:in:)];
 
-            [stateMachine emitSignal:signalA];
+            [stateMachine emitTriggerId:signalA];
             PLStateMachineTrigger * trigger = signalSpy.argument;
-            [[theValue(trigger.signal) should] equal:theValue(signalA)];
+            [[theValue(trigger.triggerId) should] equal:theValue(signalA)];
         });
 
         it(@"should transition to the state provided by the resolver", ^{
 
-            [stateMachine emitSignal:signalA];
+            [stateMachine emitTriggerId:signalA];
             [[theValue(stateMachine.state) should] equal:theValue(stateB)];
         });
 
@@ -153,7 +153,7 @@ describe(@"PLStateMachine", ^{
                 valid = YES;
             }];
 
-            [stateMachine emitSignal:signalA];
+            [stateMachine emitTriggerId:signalA];
 
             [[theValue(valid) should] beTrue];
         });
@@ -161,11 +161,11 @@ describe(@"PLStateMachine", ^{
         it(@"should handle signals emited from inside transitions callbacks", ^{
             [stateMachine onLeaving:stateA
                                call:^(PLStateMachine *fsm) {
-                                   [stateMachine emitSignal:signalA];
+                                   [stateMachine emitTriggerId:signalA];
                                }
                               owner:nil];
 
-            [stateMachine emitSignal:signalA];
+            [stateMachine emitTriggerId:signalA];
 
             [[theValue(stateMachine.state) should] equal:theValue(stateC)];
         });
@@ -174,7 +174,7 @@ describe(@"PLStateMachine", ^{
     describe(@"transition between states", ^{
         PLStateMachineStateId stateA = 3;
         PLStateMachineStateId stateB = 5;
-        PLStateMachineTriggerSignal signalA = 6;
+        PLStateMachineTriggerId signalA = 6;
 
         __block NSUInteger callCount;
         __block PLStateMachineStateChangeBlock blockA;
@@ -209,7 +209,7 @@ describe(@"PLStateMachine", ^{
         it(@"should call the 'debug' callback", ^{
             stateMachine.debugBlock = blockA;
 
-            [stateMachine emitSignal:signalA];
+            [stateMachine emitTriggerId:signalA];
 
             [[theValue(callCount) should] equal:theValue(3)];
         });
@@ -219,7 +219,7 @@ describe(@"PLStateMachine", ^{
             [stateMachine onLeaving:stateA call:blockB owner:nil];
             [stateMachine onLeaving:stateB call:blockC owner:nil];
 
-            [stateMachine emitSignal:signalA];
+            [stateMachine emitTriggerId:signalA];
 
             [[theValue(callCount) should] equal:theValue(8)];
 
@@ -229,7 +229,7 @@ describe(@"PLStateMachine", ^{
             [stateMachine onLeaving:stateA entering:stateB call:blockA owner:nil];
             [stateMachine onLeaving:stateB entering:stateA call:blockB owner:nil];
 
-            [stateMachine emitSignal:signalA];
+            [stateMachine emitTriggerId:signalA];
 
             [[theValue(callCount) should] equal:theValue(3)];
 
@@ -240,7 +240,7 @@ describe(@"PLStateMachine", ^{
             [stateMachine onEntering:stateA call:blockB owner:nil];
             [stateMachine onEntering:stateB call:blockC owner:nil];
 
-            [stateMachine emitSignal:signalA];
+            [stateMachine emitTriggerId:signalA];
 
             [[theValue(callCount) should] equal:theValue(9)];
         });
@@ -250,7 +250,7 @@ describe(@"PLStateMachine", ^{
             [stateMachine onTransitionCall:blockB owner:nil];
             [stateMachine onTransitionCall:blockC owner:nil];
 
-            [stateMachine emitSignal:signalA];
+            [stateMachine emitTriggerId:signalA];
 
             [[theValue(callCount) should] equal:theValue(17)];
 
@@ -282,7 +282,7 @@ describe(@"PLStateMachine", ^{
             }
                                      owner:nil];
 
-            [stateMachine emitSignal:signalA];
+            [stateMachine emitTriggerId:signalA];
 
         });
 
@@ -290,18 +290,18 @@ describe(@"PLStateMachine", ^{
             [stateMachine onTransitionCall:^(PLStateMachine *fsm) {
                 [[theValue(fsm.state) should] equal:theValue(stateB)];
                 [[theValue(fsm.prevState) should] equal:theValue(stateA)];
-                [[theValue(fsm.triggeredBy.signal) should] equal:theValue(signalA)];
+                [[theValue(fsm.triggeredBy.triggerId) should] equal:theValue(signalA)];
             }
                                      owner:nil];
 
-            [stateMachine emitSignal:signalA];
+            [stateMachine emitTriggerId:signalA];
         });
     });
 
     describe(@"owned callbacks", ^{
         PLStateMachineStateId stateA = 3;
         PLStateMachineStateId stateB = 5;
-        PLStateMachineTriggerSignal signalA = 6;
+        PLStateMachineTriggerId signalA = 6;
 
         __block NSUInteger callCount;
         __block PLStateMachineStateChangeBlock blockA;
@@ -347,11 +347,11 @@ describe(@"PLStateMachine", ^{
 
             [stateMachine removeListenersOwnedBy:ownerA];
 
-            [stateMachine emitSignal:signalA];
+            [stateMachine emitTriggerId:signalA];
 
             [[theValue(callCount) should] equal:theValue(5)];
 
-            [stateMachine emitSignal:signalA];
+            [stateMachine emitTriggerId:signalA];
 
             [[theValue(callCount) should] equal:theValue(5)];
         });
@@ -362,7 +362,7 @@ describe(@"PLStateMachine", ^{
 
             [stateMachine removeListenersOwnedBy:ownerA];
 
-            [stateMachine emitSignal:signalA];
+            [stateMachine emitTriggerId:signalA];
 
             [[theValue(callCount) should] equal:theValue(3)];
         });
@@ -374,11 +374,11 @@ describe(@"PLStateMachine", ^{
 
             [stateMachine removeListenersOwnedBy:ownerB];
 
-            [stateMachine emitSignal:signalA];
+            [stateMachine emitTriggerId:signalA];
 
             [[theValue(callCount) should] equal:theValue(5)];
 
-            [stateMachine emitSignal:signalA];
+            [stateMachine emitTriggerId:signalA];
 
             [[theValue(callCount) should] equal:theValue(8)];
         });
@@ -390,7 +390,7 @@ describe(@"PLStateMachine", ^{
 
             [stateMachine removeListenersOwnedBy:ownerA];
 
-            [stateMachine emitSignal:signalA];
+            [stateMachine emitTriggerId:signalA];
 
             [[theValue(callCount) should] equal:theValue(5)];
         });

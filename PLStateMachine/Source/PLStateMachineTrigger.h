@@ -44,14 +44,48 @@
 
 #import <Foundation/Foundation.h>
 
-typedef NSUInteger PLStateMachineTriggerSignal;
+/**
+* Base type for all machine trigger ids. When defining your triggers, you should use it as the base type for your NS_ENUM.
+*/
+typedef NSUInteger PLStateMachineTriggerId;
 
+/**
+* PLStateMachineTrigger represents a trigger send to a FSM. In addition to the mandatory id, a attachment object can be passed.
+* In most cases this should be sufficient. If not, it's possible to subclass PLStateMachineTrigger.
+*/
 @interface PLStateMachineTrigger : NSObject
 
-@property (nonatomic, assign, readonly) PLStateMachineTriggerSignal signal;
-@property (nonatomic, strong, readonly) id<NSObject> object;
+/**
+* Identifier
+*/
+@property(nonatomic, assign, readonly) PLStateMachineTriggerId triggerId;
 
-+(PLStateMachineTrigger*) triggerWithSignal:(PLStateMachineTriggerSignal)signal;
-+(PLStateMachineTrigger*) triggerWithSignal:(PLStateMachineTriggerSignal)signal object:(id<NSObject>)object;
+/**
+* Attachment object
+*/
+@property(nonatomic, strong, readonly) id <NSObject> object;
+
+/**
+* Initializes the trigger.
+*
+* @param triggerId the identifier for this trigger
+* @param object the attachment object (retained), can be nil
+*/
+- (id)initWithId:(PLStateMachineTriggerId)triggerId object:(id <NSObject>)object;
+
+/**
+* Shortcut constructor.
+*
+* @param triggerId the identifier for this trigger
+*/
++ (PLStateMachineTrigger *)triggerWithId:(PLStateMachineTriggerId)triggerId;
+
+/**
+* Shortcut constructor.
+*
+* @param triggerId the identifier for this trigger
+* @param object the attachment object (retained), can be nil
+*/
++ (PLStateMachineTrigger *)triggerWithId:(PLStateMachineTriggerId)triggerId object:(id <NSObject>)object;
 
 @end

@@ -46,8 +46,18 @@
 
 @class PLStateMachineTrigger;
 
+/**
+* PLStateMachineResolver is used to resolve the next state that should be entered when a trigger arrives at the registerd state.
+*/
 @protocol PLStateMachineResolver <NSObject>
 
--(PLStateMachineStateId)resolve:(PLStateMachineTrigger *)trigger in:(PLStateMachine *)sm;
+/**
+* Resolves a trigger.
+*
+* @param trigger the trigger causing the transition
+* @param sm the state machine instance this trigger is being performed on
+* @return the stateId of the state the machine should transition to, or PLStateMachineStateUndefined if no transition should be performed.
+*/
+- (PLStateMachineStateId)resolve:(PLStateMachineTrigger *)trigger in:(PLStateMachine *)sm;
 
 @end

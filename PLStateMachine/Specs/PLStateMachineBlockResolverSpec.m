@@ -13,7 +13,7 @@ describe(@"PLStateMachineBlockResolver", ^{
     beforeEach(^{
         fsm = [[PLStateMachine alloc] init];
 
-        trigger = [PLStateMachineTrigger triggerWithSignal:1];
+        trigger = [PLStateMachineTrigger triggerWithId:1];
     });
 
     it(@"should call the resolverblock with proper parameters", ^{

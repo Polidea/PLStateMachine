@@ -93,21 +93,21 @@ NSString *const kStateMachineCallbackListenerOwnerKey = @"owner";
     return self;
 }
 
-- (void)startWithState:(PLStateMachineStateId)aState {
+- (void)startWithState:(PLStateMachineStateId)stateId {
     if (state == PLStateMachineStateUndefined) {
-        [self setState:aState triggeredBy:nil];
+        [self setState:stateId triggeredBy:nil];
     }
 }
 
-- (void)emitSignal:(PLStateMachineTriggerSignal)triggerSignal {
-    [self emit:[PLStateMachineTrigger triggerWithSignal:triggerSignal]];
+- (void)emitTriggerId:(PLStateMachineTriggerId)triggerId {
+    [self emitTrigger:[PLStateMachineTrigger triggerWithId:triggerId]];
 }
 
-- (void)emitSignal:(PLStateMachineTriggerSignal)triggerSignal object:(id <NSObject>)object {
-    [self emit:[PLStateMachineTrigger triggerWithSignal:triggerSignal object:object]];
+- (void)emitTriggerId:(PLStateMachineTriggerId)triggerId object:(id <NSObject>)object {
+    [self emitTrigger:[PLStateMachineTrigger triggerWithId:triggerId object:object]];
 }
 
-- (void)emit:(PLStateMachineTrigger *)trigger {
+- (void)emitTrigger:(PLStateMachineTrigger *)trigger {
     @synchronized (self) {
         [triggerQueue addObject:trigger];
         if ([triggerQueue count] == 1) {
@@ -116,44 +116,44 @@ NSString *const kStateMachineCallbackListenerOwnerKey = @"owner";
     }
 }
 
-- (void)registerStateWithId:(PLStateMachineStateId)aState name:(NSString *)aName resolver:(id <PLStateMachineResolver>)aResolver {
-    if (![self hasState:aState]) {
-        if (aState == PLStateMachineStateUndefined) {
+- (void)registerStateWithId:(PLStateMachineStateId)stateId name:(NSString *)aName resolver:(id <PLStateMachineResolver>)aResolver {
+    if (![self hasState:stateId]) {
+        if (stateId == PLStateMachineStateUndefined) {
             @throw [NSException exceptionWithName:@"InvalidArgumentException" reason:@"you canot register the undefined state" userInfo:nil];
         }
         if (aName == nil || aResolver == nil || aName.length == 0) {
             @throw [NSException exceptionWithName:@"InvalidArgumentException" reason:@"both name and resolver must be non-nil" userInfo:nil];
         }
 
-        PLStateMachineStateNode *node = [[PLStateMachineStateNode alloc] initWithStateId:aState name:aName resolver:aResolver];
-        [registeredStates setObject:node forKey:[NSNumber numberWithUnsignedInteger:aState]];
+        PLStateMachineStateNode *node = [[PLStateMachineStateNode alloc] initWithStateId:stateId name:aName resolver:aResolver];
+        [registeredStates setObject:node forKey:[NSNumber numberWithUnsignedInteger:stateId]];
     } else {
         @throw [NSException exceptionWithName:@"InvalidStateException" reason:@"this state was already registered" userInfo:nil];
     }
 }
 
-- (BOOL)hasState:(PLStateMachineStateId)aState {
-    return [self nodeForState:aState] != nil;
+- (BOOL)hasState:(PLStateMachineStateId)stateId {
+    return [self nodeForState:stateId] != nil;
 }
 
-- (NSString *)nameForState:(PLStateMachineStateId)aState {
-    return [[self nodeForState:aState] name];
+- (NSString *)nameForState:(PLStateMachineStateId)stateId {
+    return [[self nodeForState:stateId] name];
 }
 
 - (void)onTransitionCall:(PLStateMachineStateChangeBlock)block owner:(id <NSObject>)owner {
     [self onLeaving:PLStateMachineStateUndefined entering:PLStateMachineStateUndefined call:block owner:owner];
 }
 
-- (void)onLeaving:(PLStateMachineStateId)aState call:(PLStateMachineStateChangeBlock)block owner:(id <NSObject>)owner {
-    [self onLeaving:aState entering:PLStateMachineStateUndefined call:block owner:owner];
+- (void)onLeaving:(PLStateMachineStateId)stateId call:(PLStateMachineStateChangeBlock)block owner:(id <NSObject>)owner {
+    [self onLeaving:stateId entering:PLStateMachineStateUndefined call:block owner:owner];
 }
 
-- (void)onEntering:(PLStateMachineStateId)aState call:(PLStateMachineStateChangeBlock)block owner:(id <NSObject>)owner {
-    [self onLeaving:PLStateMachineStateUndefined entering:aState call:block owner:owner];
+- (void)onEntering:(PLStateMachineStateId)stateId call:(PLStateMachineStateChangeBlock)block owner:(id <NSObject>)owner {
+    [self onLeaving:PLStateMachineStateUndefined entering:stateId call:block owner:owner];
 }
 
-- (void)onLeaving:(PLStateMachineStateId)aPrevState entering:(PLStateMachineStateId)aNewState call:(PLStateMachineStateChangeBlock)block owner:(id <NSObject>)owner {
-    PLStateMachineTransitionSignature *signature = [PLStateMachineTransitionSignature signatureForLeaving:aPrevState forEntering:aNewState];
+- (void)onLeaving:(PLStateMachineStateId)prevStateId entering:(PLStateMachineStateId)newStateId call:(PLStateMachineStateChangeBlock)block owner:(id <NSObject>)owner {
+    PLStateMachineTransitionSignature *signature = [PLStateMachineTransitionSignature signatureForLeaving:prevStateId forEntering:newStateId];
 
     NSMutableArray *listenersForSignature = [transitionListeners objectForKey:signature];
     if (listenersForSignature == nil) {

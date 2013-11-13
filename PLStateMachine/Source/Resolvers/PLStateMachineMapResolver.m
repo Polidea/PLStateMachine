@@ -86,16 +86,16 @@
     return self;
 }
 
-- (void)on:(PLStateMachineTriggerSignal)on goTo:(PLStateMachineStateId)state {
-    [map setObject:[NSNumber numberWithUnsignedInteger:state] forKey:[NSNumber numberWithUnsignedInteger:on]];
+- (void)on:(PLStateMachineTriggerId)triggerId goTo:(PLStateMachineStateId)stateId {
+    [map setObject:[NSNumber numberWithUnsignedInteger:stateId] forKey:[NSNumber numberWithUnsignedInteger:triggerId]];
 }
 
-- (void)on:(PLStateMachineTriggerSignal)on consult:(id <PLStateMachineResolver>)consultant {
-    [map setObject:consultant forKey:[NSNumber numberWithUnsignedInteger:on]];
+- (void)on:(PLStateMachineTriggerId)triggerId consult:(id <PLStateMachineResolver>)consultantResolver {
+    [map setObject:consultantResolver forKey:[NSNumber numberWithUnsignedInteger:triggerId]];
 }
 
 - (PLStateMachineStateId)resolve:(PLStateMachineTrigger *)trigger in:(PLStateMachine *)sm {
-    NSNumber *key = [NSNumber numberWithUnsignedInteger:trigger.signal];
+    NSNumber *key = [NSNumber numberWithUnsignedInteger:trigger.triggerId];
     NSObject *value = [map objectForKey:key];
 
     PLStateMachineStateId nextState = PLStateMachineStateUndefined;

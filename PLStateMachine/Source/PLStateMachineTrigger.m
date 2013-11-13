@@ -47,29 +47,27 @@
 
 @implementation PLStateMachineTrigger {
 
-@private
-    NSUInteger signal;
-    id <NSObject> object;
 }
-@synthesize signal;
-@synthesize object;
 
-- (id)initWithSignal:(NSUInteger)aSignal object:(id <NSObject>)aObject {
+@synthesize triggerId = _triggerId;
+@synthesize object = _object;
+
+- (id)initWithId:(PLStateMachineTriggerId)triggerId object:(id <NSObject>)object {
     self = [super init];
     if (self) {
-        signal = aSignal;
-        object = aObject;
+        _triggerId = triggerId;
+        _object = object;
     }
 
     return self;
 }
 
-+ (PLStateMachineTrigger *)triggerWithSignal:(NSUInteger)aSignal {
-    return [[self alloc] initWithSignal:aSignal object:nil];
++ (PLStateMachineTrigger *)triggerWithId:(PLStateMachineTriggerId)triggerId {
+    return [[self alloc] initWithId:triggerId object:nil];
 }
 
-+ (PLStateMachineTrigger *)triggerWithSignal:(NSUInteger)aSignal object:(id <NSObject>)aObject {
-    return [[self alloc] initWithSignal:aSignal object:aObject];
++ (PLStateMachineTrigger *)triggerWithId:(PLStateMachineTriggerId)triggerId object:(id <NSObject>)object {
+    return [[self alloc] initWithId:triggerId object:object];
 }
 
 @end

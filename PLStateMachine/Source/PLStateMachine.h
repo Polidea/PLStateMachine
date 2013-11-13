@@ -45,39 +45,147 @@
 #import <Foundation/Foundation.h>
 #import "PLStateMachineTrigger.h"
 
-#define PLSTATE_MACHINE_VERSION 3.1
+#define PLSTATE_MACHINE_VERSION 3.2
 
 @class PLStateMachine;
 @protocol PLStateMachineResolver;
 
-typedef void (^PLStateMachineStateChangeBlock)(PLStateMachine * fsm);
+/**
+* Action callback type.
+*/
+typedef void (^PLStateMachineStateChangeBlock)(PLStateMachine *fsm);
+
+/**
+* Base type for all machine state ids. When defining your states, you should use it as the base type for your NS_ENUM.
+*/
 typedef NSUInteger PLStateMachineStateId;
 
+/**
+*  PLStateMachineStateUndefined used as the initial state of the machine, and by transition resolvers to signal that no state change should take place.
+*/
 static PLStateMachineStateId const PLStateMachineStateUndefined = NSUIntegerMax;
 
+/**
+* PLStateMachine is a tool helping to model a Finite State Machine. A mathematical construct very useful when implementing
+* complex processes and decision flows.
+*/
 @interface PLStateMachine : NSObject
 
-@property (nonatomic, assign, readonly) PLStateMachineStateId prevState;
-@property (nonatomic, assign, readonly) PLStateMachineStateId state;
-@property (nonatomic, strong, readonly) PLStateMachineTrigger * triggeredBy;
+/**
+* StateId of the previous state
+*/
+@property(nonatomic, assign, readonly) PLStateMachineStateId prevState;
 
-@property (nonatomic, copy, readwrite) PLStateMachineStateChangeBlock debugBlock;
+/**
+* StateId of the current state
+*/
+@property(nonatomic, assign, readonly) PLStateMachineStateId state;
 
--(void)startWithState:(PLStateMachineStateId)state;
+/**
+* Trigger that caused the transition to the current state
+*/
+@property(nonatomic, strong, readonly) PLStateMachineTrigger *triggeredBy;
 
--(void)emitSignal:(PLStateMachineTriggerSignal)triggerSignal;
--(void)emitSignal:(PLStateMachineTriggerSignal)triggerSignal object:(id<NSObject>)object;
--(void)emit:(PLStateMachineTrigger*)trigger;
+/**
+* A callback block that gets called on every state machine change
+*/
+@property(nonatomic, copy, readwrite) PLStateMachineStateChangeBlock debugBlock;
 
--(void)registerStateWithId:(PLStateMachineStateId)state name:(NSString*)name resolver:(id<PLStateMachineResolver>)resolver;
--(BOOL)hasState:(PLStateMachineStateId)state;
--(NSString *)nameForState:(PLStateMachineStateId)state;
+/**
+* Orders the fsm to start.
+*
+* @param stateId the id of the state the machine should start in.
+*/
+- (void)startWithState:(PLStateMachineStateId)stateId;
 
--(void)onTransitionCall:(PLStateMachineStateChangeBlock)block owner:(id<NSObject>)owner;
--(void)onLeaving:(PLStateMachineStateId)state call:(PLStateMachineStateChangeBlock)block owner:(id<NSObject>)owner;
--(void)onEntering:(PLStateMachineStateId)state call:(PLStateMachineStateChangeBlock)block owner:(id<NSObject>)owner;
--(void)onLeaving:(PLStateMachineStateId)prevState entering:(PLStateMachineStateId)newState call:(PLStateMachineStateChangeBlock)block owner:(id<NSObject>)owner;
+/**
+* Constructs and emits a trigger (short form).
+*
+* @param triggerId the id of the trigger to emit
+*/
+- (void)emitTriggerId:(PLStateMachineTriggerId)triggerId;
 
--(void) removeListenersOwnedBy:(id<NSObject>)owner;
+/**
+* Constructs and emits a trigger.
+*
+* @param triggerId the id of the trigger to emit
+* @param object a trigger attachment
+*/
+- (void)emitTriggerId:(PLStateMachineTriggerId)triggerId object:(id <NSObject>)object;
+
+/**
+* Emits a trigger.
+*
+* @param trigger pre-constructed trigger
+*/
+- (void)emitTrigger:(PLStateMachineTrigger *)trigger;
+
+/**
+* Registers a state.
+*
+* @param stateId the id of the state. No two states with the same id can be registered at a time
+* @param name a human readable identifier for the state. It doesn't have to be unique
+* @param resolver the resolver to be used for this state. See PLStateMachineResolver for more info on resolvers
+*/
+- (void)registerStateWithId:(PLStateMachineStateId)stateId name:(NSString *)name resolver:(id <PLStateMachineResolver>)resolver;
+
+/**
+* Checks if a state is registered.
+*
+* @param stateId the id of the state to check
+* @return YES if the state was previously registered, NO otherwise
+*/
+- (BOOL)hasState:(PLStateMachineStateId)stateId;
+
+/**
+* Returns the name for a state.
+*
+* @param stateId the id of the state to check
+* @return the name of the state
+*/
+- (NSString *)nameForState:(PLStateMachineStateId)stateId;
+
+/**
+* Registers a transition callback between any two states.
+*
+* @param block the transition callback, you can register multiple callbacks for the same transition.
+* @param owner the owner(weak referenced) of this callback that can be used for targeted removal
+*/
+- (void)onTransitionCall:(PLStateMachineStateChangeBlock)block owner:(id <NSObject>)owner;
+
+/**
+* Registers a transition callback for leaving a state.
+*
+* @param stateId the id of the targeted state
+* @param block the transition callback
+* @param owner the owner(weak referenced) of this callback that can be used for targeted removal
+*/
+- (void)onLeaving:(PLStateMachineStateId)stateId call:(PLStateMachineStateChangeBlock)block owner:(id <NSObject>)owner;
+
+/**
+* Registers a transition callback for entering a state.
+*
+* @param stateId the id of the targeted state
+* @param block the transition callback, you can register multiple callbacks for the same transition
+* @param owner the owner(weak referenced) of this callback that can be used for targeted removal
+*/
+- (void)onEntering:(PLStateMachineStateId)stateId call:(PLStateMachineStateChangeBlock)block owner:(id <NSObject>)owner;
+
+/**
+* Registers a transition callback between two defined states.
+*
+* @param prevStateId the id of the state that's being left
+* @param newStateId the id of the state that's being entered
+* @param block the transition callback, you can register multiple callbacks for the same transition
+* @param owner the owner(weak referenced) of this callback that can be used for targeted removal
+*/
+- (void)onLeaving:(PLStateMachineStateId)prevStateId entering:(PLStateMachineStateId)newStateId call:(PLStateMachineStateChangeBlock)block owner:(id <NSObject>)owner;
+
+/**
+* Removes all the transition callbacks that ware registered with the provided owner.
+*
+* @param owner the owner of the to be removed callbacks
+*/
+- (void)removeListenersOwnedBy:(id <NSObject>)owner;
 
 @end

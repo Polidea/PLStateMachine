@@ -45,14 +45,47 @@
 #import <Foundation/Foundation.h>
 #import "PLStateMachineResolver.h"
 
+/**
+* Resolver based on a map. TriggerIds are used for keys. Values can be either stateId, or other resolvers.
+*/
 @interface PLStateMachineMapResolver : NSObject<PLStateMachineResolver>
 
+/**
+* Initializes a map resolver.
+*
+* @param parent parent resolver for this resolver. It will be consulted if no mapping can be established on this level
+* @param map a map with triggerIds as keys, and either stateId, or other resolvers as values
+*/
 - (id)initWithParent:(id <PLStateMachineResolver>)parent map:(NSDictionary *)map;
 
--(void)on:(PLStateMachineTriggerSignal)on goTo:(PLStateMachineStateId)state;
--(void)on:(PLStateMachineTriggerSignal)on consult:(id<PLStateMachineResolver>)consultant;
+/**
+* Adds direct transition mapping
+*
+* @param triggerId the trigger id to map from
+* @param stateId the state id to transition to
+*/
+- (void)on:(PLStateMachineTriggerId)triggerId goTo:(PLStateMachineStateId)stateId;
 
+/**
+* Adds consulted transition mapping
+*
+* @param triggerId the trigger id to map from
+* @param consultantResolver the resolver which will be consulted
+*/
+- (void)on:(PLStateMachineTriggerId)triggerId consult:(id <PLStateMachineResolver>)consultantResolver;
 @end
 
+/**
+* Shortcut c-style method for fast block resolver construction
+*
+* @param map a map with triggerIds as keys, and either stateId, or other resolvers as values
+*/
 PLStateMachineMapResolver *mapResolver(NSDictionary *map);
+
+/**
+* Shortcut c-style method for fast block resolver construction
+*
+* @param parent parent resolver for this resolver. It will be consulted if no mapping can be established on this level
+* @param map a map with triggerIds as keys, and either stateId, or other resolvers as values
+*/
 PLStateMachineMapResolver *childMapResolver(id <PLStateMachineResolver> parent, NSDictionary *map);

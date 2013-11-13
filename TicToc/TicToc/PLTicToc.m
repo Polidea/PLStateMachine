@@ -141,7 +141,7 @@ action callbacks is presented. As are both map and block resolvers.
 
         //In addition to the normal action callbacks, you can use the debug block
         _fsm.debugBlock = ^(PLStateMachine *fsm) {
-            NSLog(@"tictoc: %@ -> %@ : %d", [fsm nameForState:fsm.prevState], [fsm nameForState:fsm.state], fsm.triggeredBy.signal);
+            NSLog(@"tictoc: %@ -> %@ : %d", [fsm nameForState:fsm.prevState], [fsm nameForState:fsm.state], fsm.triggeredBy.triggerId);
         };
 
         [_fsm startWithState:PLTicTocStateStart];
@@ -177,12 +177,12 @@ Just to be pedantic about KVC.
 }
 
 - (void)tic {
-    //this is how you emit a signal
-    [_fsm emitSignal:PLTicTocTriggerTic];
+    //this is how you emit a triggerId
+    [_fsm emitTriggerId:PLTicTocTriggerTic];
 }
 
 - (void)timeout {
-    [_fsm emitSignal:PLTicTocTriggerTimeout];
+    [_fsm emitTriggerId:PLTicTocTriggerTimeout];
 }
 
 @end

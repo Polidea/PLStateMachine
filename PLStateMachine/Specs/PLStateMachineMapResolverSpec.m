@@ -11,8 +11,8 @@ SPEC_BEGIN(PLStateMachineMapResolverSpec)
             PLStateMachineStateId const stateId1 = 32;
             PLStateMachineStateId const stateId2 = 13;
 
-            PLStateMachineTriggerSignal const triggerSignal1 = 2;
-            PLStateMachineTriggerSignal const triggerSignal2 = 3;
+            PLStateMachineTriggerId const triggerSignal1 = 2;
+            PLStateMachineTriggerId const triggerSignal2 = 3;
 
             beforeEach(^{
                 fsm = [[PLStateMachine alloc] init];
@@ -24,7 +24,7 @@ SPEC_BEGIN(PLStateMachineMapResolverSpec)
                 [resolver on:triggerSignal1 goTo:stateId1];
                 [resolver on:triggerSignal2 goTo:stateId2];
 
-                [[theValue([resolver resolve:[PLStateMachineTrigger triggerWithSignal:triggerSignal2] in:fsm]) should] equal:theValue(stateId2)];
+                [[theValue([resolver resolve:[PLStateMachineTrigger triggerWithId:triggerSignal2] in:fsm]) should] equal:theValue(stateId2)];
             });
 
             it(@"should use the proper trigger->block->state configuration", ^{
@@ -53,10 +53,10 @@ SPEC_BEGIN(PLStateMachineMapResolverSpec)
                          }
                      })];
 
-                [[theValue([resolver resolve:[PLStateMachineTrigger triggerWithSignal:triggerSignal1 object:nil] in:fsm]) should] equal:theValue(stateId2)];
-                [[theValue([resolver resolve:[PLStateMachineTrigger triggerWithSignal:triggerSignal1 object:a] in:fsm]) should] equal:theValue(stateId1)];
-                [[theValue([resolver resolve:[PLStateMachineTrigger triggerWithSignal:triggerSignal2 object:nil] in:fsm]) should] equal:theValue(stateId1)];
-                [[theValue([resolver resolve:[PLStateMachineTrigger triggerWithSignal:triggerSignal2 object:a] in:fsm]) should] equal:theValue(stateId2)];
+                [[theValue([resolver resolve:[PLStateMachineTrigger triggerWithId:triggerSignal1 object:nil] in:fsm]) should] equal:theValue(stateId2)];
+                [[theValue([resolver resolve:[PLStateMachineTrigger triggerWithId:triggerSignal1 object:a] in:fsm]) should] equal:theValue(stateId1)];
+                [[theValue([resolver resolve:[PLStateMachineTrigger triggerWithId:triggerSignal2 object:nil] in:fsm]) should] equal:theValue(stateId1)];
+                [[theValue([resolver resolve:[PLStateMachineTrigger triggerWithId:triggerSignal2 object:a] in:fsm]) should] equal:theValue(stateId2)];
                 [[theValue(callCount) should] equal:theValue(4)];
             });
 
@@ -70,8 +70,8 @@ SPEC_BEGIN(PLStateMachineMapResolverSpec)
                                 })
                         });
 
-                        [[theValue([resolver resolve:[PLStateMachineTrigger triggerWithSignal:triggerSignal1] in:fsm]) should] equal:theValue(stateId1)];
-                        [[theValue([resolver resolve:[PLStateMachineTrigger triggerWithSignal:triggerSignal2] in:fsm]) should] equal:theValue(stateId2)];
+                        [[theValue([resolver resolve:[PLStateMachineTrigger triggerWithId:triggerSignal1] in:fsm]) should] equal:theValue(stateId1)];
+                        [[theValue([resolver resolve:[PLStateMachineTrigger triggerWithId:triggerSignal2] in:fsm]) should] equal:theValue(stateId2)];
                     });
 
                     it(@"should rise an exception if the map has non NSNumber keys/objects", ^{
@@ -98,8 +98,8 @@ SPEC_BEGIN(PLStateMachineMapResolverSpec)
                 })];
 
                 [[parentResolver shouldNot] receive:@selector(resolve:in:)];
-                [[theValue([resolver resolve:[PLStateMachineTrigger triggerWithSignal:triggerSignal1] in:fsm]) should] equal:theValue(stateId1)];
-                [[theValue([resolver resolve:[PLStateMachineTrigger triggerWithSignal:triggerSignal2] in:fsm]) should] equal:theValue(stateId2)];
+                [[theValue([resolver resolve:[PLStateMachineTrigger triggerWithId:triggerSignal1] in:fsm]) should] equal:theValue(stateId1)];
+                [[theValue([resolver resolve:[PLStateMachineTrigger triggerWithId:triggerSignal2] in:fsm]) should] equal:theValue(stateId2)];
             });
 
             it(@"should consult the parent resolver if the resolverblock fails", ^{
@@ -113,8 +113,8 @@ SPEC_BEGIN(PLStateMachineMapResolverSpec)
                                                                                                             })
                                                                                                     }];
 
-                [[theValue([resolver resolve:[PLStateMachineTrigger triggerWithSignal:triggerSignal1] in:fsm]) should] equal:theValue(stateId1)];
-                [[theValue([resolver resolve:[PLStateMachineTrigger triggerWithSignal:triggerSignal2] in:fsm]) should] equal:theValue(stateId1)];
+                [[theValue([resolver resolve:[PLStateMachineTrigger triggerWithId:triggerSignal1] in:fsm]) should] equal:theValue(stateId1)];
+                [[theValue([resolver resolve:[PLStateMachineTrigger triggerWithId:triggerSignal2] in:fsm]) should] equal:theValue(stateId1)];
             });
         });
 

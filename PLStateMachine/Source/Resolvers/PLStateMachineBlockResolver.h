@@ -47,11 +47,30 @@
 
 typedef PLStateMachineStateId (^PLStateMachineBlockResolverBlock)(PLStateMachineTrigger *, PLStateMachine *);
 
-@interface PLStateMachineBlockResolver : NSObject<PLStateMachineResolver>
+/**
+* Resolver using a block that gets called for each trigger arriving to the machine.
+*/
+@interface PLStateMachineBlockResolver : NSObject <PLStateMachineResolver>
 
+/**
+* Initializes a block resolver.
+* @param parent parent resolver for this resolver. It will be consulted if the call to the provided resolverBlock returns no results.
+* @param resolverBlock the block to be called for each trigger
+*/
 - (id)initWithParent:(id <PLStateMachineResolver>)parent resolverBlock:(PLStateMachineBlockResolverBlock)resolverBlock;
 
 @end
 
-PLStateMachineBlockResolver * blockResolver(PLStateMachineBlockResolverBlock block);
-PLStateMachineBlockResolver * childBlockResolver(id<PLStateMachineResolver> parent, PLStateMachineBlockResolverBlock block);
+/**
+* Shortcut c-style method for fast block resolver construction
+* @param block the block to be called for each trigger
+*/
+PLStateMachineBlockResolver *blockResolver(PLStateMachineBlockResolverBlock block);
+
+/**
+* Shortcut c-style method for fast block resolver construction
+*
+* @param parent parent resolver for this resolver. It will be consulted if the call to the provided resolverBlock returns no results.
+* @param resolverBlock the block to be called for each trigger
+*/
+PLStateMachineBlockResolver *childBlockResolver(id <PLStateMachineResolver> parent, PLStateMachineBlockResolverBlock block);
