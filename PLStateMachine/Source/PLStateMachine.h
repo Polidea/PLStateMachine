@@ -26,6 +26,9 @@
  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+ Rev 4.0 (Feb 2014):
+ The FSM uses an internal GCD queue for transition and callback delivery.
+
  Rev 3.0 (Oct 2012):
  Major rewrite:
  States now use resolvers instead of transition maps.
@@ -90,6 +93,18 @@ static PLStateMachineStateId const PLStateMachineStateUndefined = NSUIntegerMax;
 * A callback block that gets called on every state machine change
 */
 @property(nonatomic, copy, readwrite) PLStateMachineStateChangeBlock debugBlock;
+
+/**
+* Initializes fsm
+*
+* @param queue the queue (DISPATCH_QUEUE_SERIAL) used internally by the fsm. All transition callbacks and KVO notifications will emit on this queue. If nil is provided, a queue will be created.
+*/
+- (id)initWithQueue:(dispatch_queue_t)queue;
+
+/**
+* Blocks the caller thread until the machine settles.
+*/
+- (void)wait;
 
 /**
 * Orders the fsm to start.

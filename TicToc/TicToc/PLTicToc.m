@@ -8,7 +8,7 @@
 #import <PLStateMachine/PLStateMachineBlockResolver.h>
 #import "PLTicToc.h"
 
-typedef NS_ENUM(PLStateMachineTriggerSignal, PLTicTocTrigger) {
+typedef NS_ENUM(PLStateMachineTriggerId, PLTicTocTrigger) {
     PLTicTocTriggerTic,
     PLTicTocTriggerTimeout,
 };
@@ -40,7 +40,7 @@ action callbacks is presented. As are both map and block resolvers.
         __weak __block typeof (self) weakSelf = self;
 
         //create the FSM
-        _fsm = [PLStateMachine new];
+        _fsm = [[PLStateMachine alloc] initWithQueue:dispatch_get_main_queue()];
 
         //just a value holding the timestamp of the last click. We need it to calculate the time passed beaten clicks.
         __block NSTimeInterval lastTic = [NSDate timeIntervalSinceReferenceDate];

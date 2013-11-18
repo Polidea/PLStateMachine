@@ -26,6 +26,9 @@
  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+ Rev 4.0 (Feb 2014):
+ The FSM uses an internal GCD queue for transition and callback delivery.
+
  Rev 3.0 (Oct 2012):
  Major rewrite:
  States now use resolvers instead of transition maps.
