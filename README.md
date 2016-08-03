@@ -1,3 +1,9 @@
+---
+
+__This repository is no longer maintained. Issue reports and pull requests will not be attended.__
+
+---
+
 # PLStateMachine
 
 State machine framework for Objective-C
